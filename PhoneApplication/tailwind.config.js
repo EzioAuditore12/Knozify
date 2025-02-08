@@ -3,10 +3,15 @@ module.exports = {
   // NOTE: Update this to include the paths to all of your component files.
   content: [
     "./src/App.{js,jsx,ts,tsx}",
+    "./src/components/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
   theme: {
-  extend: {},
+  extend: {
+    screens: {
+        'h-xr': { raw: '(min-height: 896px)' },
+    },
+  },
   },
   plugins: [],
   }
