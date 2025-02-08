@@ -10,7 +10,7 @@ You can follow and install the required packages with
 npm install
 ```
 
-### Manual Setup
+### Manual Setup:-
 
 1. NativeWind 
     
@@ -138,7 +138,7 @@ npm install
         /// <reference types="nativewind/types" />
          ```
 
-    8. Now you can verify that nativeWind is working or not by just trying this in App.tsx and the background colour will change
+    8. Now you can verify that nativeWind is working or not by just trying this in App.tsx and the background colour will change to red
 
     ```tsx
     import { View, Text } from 'react-native'
@@ -155,6 +155,63 @@ npm install
 
     export default App
     ```
+
+
+  2. React-Native-Vector-Icons
+
+    1. Install the following package:-
+
+    ```bash
+    npm install --save react-native-vector-icons
+    ``` 
+
+    For Icons Refrence , you can use:-
+    https://oblador.github.io/react-native-vector-icons/
+
+    2. Now in android android/app/build.gradle and add this
+
+    ```gradle
+    apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+    ```
+
+  3. React-Native-Navigation
+
+    You can follow the docs here of React-Navigation for more :- 
+    https://reactnavigation.org/docs/getting-started
+    
+    1. Install the follwing packages:-
+   
+    ```bash
+    npm install @react-navigation/native
+    npm install react-native-screens react-native-safe-area-context
+    ```
+
+    2. Now there are different types of Navigation, we are going to use 2 right now as mentioned:-
+
+        1. Bottom Tabs Navigator
+
+          You can follow these docs for more information:-
+          https://reactnavigation.org/docs/bottom-tab-navigator/
+
+          1. Install the follwing package:-
+
+          ```bash
+          npm install @react-navigation/bottom-tabs
+          ```
+
+        2. Stack Navigator
+        
+           You can follow these docs for more information:-
+           https://reactnavigation.org/docs/stack-navigator/
+
+           1. Install the following packages:-
+
+           ```bash
+           npm install @react-navigation/stack
+           npm install react-native-gesture-handler
+           npm install @react-native-masked-view/masked-view
+           ```
+
 
 
 
