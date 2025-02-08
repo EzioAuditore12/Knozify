@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react';
-import loginBackground from '../assets/loginBackground.jpg';
+import loginBackground from '../../assets/loginBackground.jpg';
 
 function LoginBackground() {
   const [imageClass, setImageClass] = useState('absolute');

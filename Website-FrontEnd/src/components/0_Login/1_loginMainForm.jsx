@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import Switch from 'react-switch'
+import { useNavigate } from 'react-router-dom'
 
 function LoginMainForm() {
+    const navigate = useNavigate()
     const [rememberMe, setRememberMe] = useState(true)
 
     const loginValidationSchema = yup.object().shape({
@@ -40,7 +42,8 @@ function LoginMainForm() {
                     touched,
                     isValid,
                 }) => (
-                    <form onSubmit={handleSubmit} className='bg-white rounded-3xl flex flex-col gap-y-3 w-full mt-4 mb-4 p-2 shadow-lg max-w-[600px] h-xr:gap-y-5 md:p-3 xl:w-[500px] xl:gap-y-6'>
+                    <form onSubmit={handleSubmit} 
+                          className='bg-white rounded-3xl flex flex-col gap-y-3 w-full mt-4 mb-4 p-2 shadow-lg max-w-[600px] h-xr:gap-y-5 md:p-3 xl:w-[500px] xl:gap-y-6'>
                         <h2 className='font-semibold md:text-lg'>Username or Email</h2>
                         <input
                             type='text'
@@ -88,12 +91,15 @@ function LoginMainForm() {
                             Login
                         </button>
 
-                        <h3 className='text-center'>
-                            Don't have an account? {' '}
-                            <a href='/register' className='text-green-500 hover:text-green-600'>
+                        <div className='text-center mt-4'>
+                                <span className='text-gray-700'>Don't have an account yet! </span>
+                                <button
+                                    className='text-green-600 font-semibold'
+                                    onClick={() => navigate('/register')}
+                                >
                                 Register
-                            </a>
-                        </h3>
+                                </button>
+                            </div>
                     </form>
                 )}
             </Formik>
