@@ -211,6 +211,22 @@ npm install
             npm install react-native-gesture-handler
             npm install @react-native-masked-view/masked-view
             ```
+  
+  4. React-Native-Formik
+         
+         1. Install the package
+
+           ```bash
+           npm i formik
+           ```
+
+  5. Yup
+   
+         1. Install the package
+
+          ```bash
+          npm i yup
+          ``` 
 
 
 
