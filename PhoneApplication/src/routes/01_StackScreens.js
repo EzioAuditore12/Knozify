@@ -12,7 +12,13 @@ const stack = createStackNavigator()
 const StackScreens = () => {
   return (
     <stack.Navigator>
-        <stack.Screen name="Login" component={Login} />
+        <stack.Screen 
+        name="Login" 
+        component={Login}
+        options={{
+            headerShown: false
+        }}
+         />
         <stack.Screen name="Register" component={Register} />
     </stack.Navigator>
   )
