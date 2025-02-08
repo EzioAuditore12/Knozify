@@ -19,7 +19,13 @@ const StackScreens = () => {
             headerShown: false
         }}
          />
-        <stack.Screen name="Register" component={Register} />
+        <stack.Screen 
+        name="Register" 
+        component={Register}
+        options={{
+            headerShown: false
+        }}
+         />
     </stack.Navigator>
   )
 }
