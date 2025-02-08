@@ -13,6 +13,9 @@ npm install
 ### Manual Setup
 
 1. NativeWind 
+    
+    You can follow the docs here in case of any error:-
+    https://www.nativewind.dev/getting-started/react-native
 
     1. Install the following packages:-
 
@@ -60,7 +63,7 @@ npm install
         presets: [require("nativewind/preset")],
         ```
     
-    3. Create a global css file
+    4. Create a global css file
 
         1. If you are using bash, you can directly write these commands
 
@@ -78,7 +81,7 @@ npm install
         @tailwind utilities;
         ```
 
-    3. Update the babel.config.js
+    5. Update the babel.config.js
         
         1. If you are using bash , you can directly write these commands
 
@@ -95,6 +98,63 @@ npm install
         ```js
         presets: ['module:@react-native/babel-preset', 'nativewind/babel'],
         ```
-       
+    
+    6. Update the metro.config.js
+
+         1. If you are using bash , you can directly write these commands
+
+         ```bash
+          cat > metro.config.js <<EOL
+          const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+          const { withNativeWind } = require("nativewind/metro");
+
+          const config = mergeConfig(getDefaultConfig(__dirname), {
+          /* your config */
+          });
+
+          module.exports = withNativeWind(config, { input: "./global.css" });
+         EOL
+         ```
+         2. For manually, just add these lines inside metro.config.js
+
+         ```js
+          const { withNativeWind } = require("nativewind/metro");
+          const config = mergeConfig(getDefaultConfig(__dirname), {
+          /* your config */
+          });
+
+          module.exports = withNativeWind(config, { input: "./global.css" });
+         ```
+    7. Create a nativwind environment in case of typescript
+         
+         1. If you are using bash , you can directly write these commands
+
+         ```bash
+         echo "/// <reference types=\"nativewind/types\" />" > nativewind-env.d.ts
+         ```
+         2. In case of manually just create a file named nativewind-env.d.ts and paste following line
+         
+         ```ts
+        /// <reference types="nativewind/types" />
+         ```
+
+    8. Now you can verify that nativeWind is working or not by just trying this in App.tsx and the background colour will change
+
+    ```tsx
+    import { View, Text } from 'react-native'
+    import React from 'react'
+    import "../global.css"
+
+    const App = () => {
+    return (
+    <View className='flex-1 justify-center items-center bg-red-500'>
+      <Text className='text-3xl text-center'>App initialized with nativeWind</Text>
+    </View>
+    )
+    }
+
+    export default App
+    ```
+
 
 
