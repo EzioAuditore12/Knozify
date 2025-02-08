@@ -1,97 +1,100 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Installation and Setup
 
-## Step 1: Start Metro
+You can follow and install the required packages with
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+ For more detail you can look in dependencies and dev dependecies in package.json
 
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```
+npm install
 ```
 
-## Step 2: Build and run your app
+### Manual Setup
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+1. NativeWind 
 
-### Android
+    1. Install the following packages:-
 
-```sh
-# Using npm
-npm run android
+    ```bash
+    npm install nativewind tailwindcss react-native-reanimated react-native-safe-area-context
+    ```
+    2. Make a tailwind config file
 
-# OR using Yarn
-yarn android
-```
+    ```bash
+    npx tailwindcss init
+    ```
 
-### iOS
+    3. Update configurations in tailwind.config.js by adding required paths
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+        1. If you ar using bash terminal you can directly run this command:
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+        ```bash
+        cat > tailwind.config.js <<EOL
+        /** @type {import('tailwindcss').Config} */
+          module.exports = {
+          // NOTE: Update this to include the paths to all of your component files.
+          content: [
+          "./App.{js,jsx,ts,tsx}",
+          ],
+          presets: [require("nativewind/preset")],
+          theme: {
+          extend: {},
+          },
+          plugins: [],
+          }
+        EOL
+        ```
 
-```sh
-bundle install
-```
+        2. Else, you can add path in conten file manually of your app
 
-Then, and every time you update your native dependencies, run:
+        ```js
+        content: [
+          "./App.{js,jsx,ts,tsx}",
+        ],
+        ```
 
-```sh
-bundle exec pod install
-```
+        Add the required presets
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+        ```js
+        presets: [require("nativewind/preset")],
+        ```
+    
+    3. Create a global css file
 
-```sh
-# Using npm
-npm run ios
+        1. If you are using bash, you can directly write these commands
 
-# OR using Yarn
-yarn ios
-```
+        ```bash
+        echo "@tailwind base;" > global.css
+        echo "@tailwind components;" >> global.css
+        echo "@tailwind utilities;" >> global.css
+        ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+        2. Else , you can create a global.css and add these in it
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+        ```css
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+        ```
 
-## Step 3: Modify your app
+    3. Update the babel.config.js
+        
+        1. If you are using bash , you can directly write these commands
 
-Now that you have successfully run the app, let's make changes!
+        ```bash
+        cat > babel.config.js <<EOL
+        module.exports = {
+        presets: ['module:@react-native/babel-preset', 'nativewind/babel'],
+        };
+        EOL
+        ```
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+        2. For manually just add the nativewind/babel in babel.config.js
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+        ```js
+        presets: ['module:@react-native/babel-preset', 'nativewind/babel'],
+        ```
+       
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
