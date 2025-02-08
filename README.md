@@ -32,10 +32,10 @@ Watching each reels and post will give you points you deserve which can be conve
 
 
 # Table of Contents
-1. [Features](#features-🚀)
-2. [Tech Stack](#tech-stack-🤖)
-3. [About App](#about-app-📱)
-4. [About Website](#about-website-🌐)
+1. [Features](#features-)
+2. [Tech Stack](#tech-stack-)
+3. [About App](#about-app-)
+4. [About Website](#about-website-)
 
 # Features 🚀
 Will write about features of our app (technical features ofcourse)
