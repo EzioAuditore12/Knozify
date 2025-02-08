@@ -20,7 +20,7 @@ function LoginBackground() {
   }, []);
 
   return (
-    <div className='h-[250px] h-xr:h-[500px] md:h-[350px] overflow-hidden rounded-b-3xl relative xl:h-screen xl:rounded-none xl:w-[50%]'>
+    <div className='h-[250px] h-xr:h-[500px] md:h-[350px] overflow-hidden rounded-b-3xl relative xl:h-full xl:rounded-none xl:w-[50%]'>
       <img 
         src={loginBackground} 
         alt="loginBackground"

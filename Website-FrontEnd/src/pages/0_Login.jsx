@@ -6,7 +6,7 @@ import LoginMainForm from '../components/1_loginMainForm'
 
 const Login = () => {
   return (
-    <div className='flex flex-col h-screen bg-slate-100 xl:flex-row'>
+    <div className='flex flex-col h-full bg-slate-100 xl:flex-row'>
     <LoginBackground/>
     <LoginMainForm/>
     </div>
