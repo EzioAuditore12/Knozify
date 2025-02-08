@@ -1,0 +1,90 @@
+from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+
+# Private Libraries
+from Profile_Service.apis.authorization.auth import CustomJWTAuthentication
+
+
+# API classes
+from .apis.register_handler import send_OTP, verify_registration
+from .apis.login import login_user
+from .apis.tokens import verify_access_token, verify_refresh_token
+
+
+
+class SendOTP_API(APIView):
+    """
+    **Sends OTP for registeration**
+    
+        1. Parameters:
+        - `request` :  request from API
+
+        2. API input:
+        - `phone_no` : phone number of user.
+        - `user_name` : User name of user.
+        - `email` : Email of user.
+    """
+    def post(self, request):
+        return send_OTP(request=request)
+
+
+class OTP_verification_API(APIView):
+    """
+    **Verifies OTP and saves User Info in Database (if correct)**
+    
+        1. Parameters:
+        - `request` :  request from API
+
+        2. API input:
+        - data : All required **Registration data** in user.
+        - `otp` : otp entered by **User**.
+    """
+    def post(self, request):
+        return verify_registration(request=request)
+
+
+class Login_API(APIView):
+    """
+    **Logins user if username exists and, is correct with correct password**
+
+        1. Parameters:
+        - `request` :  request from API
+        
+        2. Inputs:
+        - `user_name` : User name of User.
+        - `password` : password of User.
+    """
+    def post(self, request):
+        return login_user(request=request)
+
+
+class ValidateAccessToken_API(APIView):
+    """
+    **Verifies if access token of client is *correct* or not**
+
+        1. Parameters:
+        - `request` :  request from API
+        
+    """
+    authentication_classes = [CustomJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return verify_access_token(request=request)
+
+
+class RefreshToken_API(APIView):
+    """
+    Verifies if Refresh token of client is **correct** or not
+    and gives back **new access** token if **correct**
+
+        1. Parameters:
+        - `request` :  request from API
+
+        2. Input:
+        - `refresh` : Refresh Token of user.
+        
+    """
+    def post(self, request, *args, **kwargs):
+        return verify_refresh_token(request=request)

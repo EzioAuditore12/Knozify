@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+# Load .env configurations
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +25,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8qeru1^(qo^)_gimsv(h4jio1w0=6((e=uc_7t0mnhgx1pa!+0'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -37,11 +43,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
+    'storages',
+    
+    # Jwt authentication
+    'rest_framework',
+    'rest_framework_simplejwt',
+
+    # Services (Apps)
+    'Profile_Service',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # for cors policy
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -70,13 +86,52 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Core.wsgi.application'
 
 
-# Database
+# Database (Mongo DB setup)
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
+MONGO_PASSWORD = os.environ.get('MONGO_PASSWORD')
+MONGO_CLUSTER = os.environ.get('MONGO_CLUSTER')
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': os.environ.get("MONGO_CLUSTER_NAME"),
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': MONGO_CLUSTER,
+            'username': MONGO_USERNAME,
+            'password': MONGO_PASSWORD,
+            'authMechanism': 'SCRAM-SHA-1',
+        }
+    }
+}
+
+# Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication', # Extra
+    )
+}
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': '_id',  # Use `_id` instead of `id` because of fookin MongoDb Object Ids
+    'USER_ID_CLAIM': 'user_id',  # Claim name in the token if needed
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',)
+}
+
+# Caching using Redis
+REDIS_LOCATION = os.environ.get('REDIS_LOCATION')
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": REDIS_LOCATION,
     }
 }
 
@@ -115,9 +170,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# I don't remember for what reason I added this
+SESSION_COOKIE_SAMESITE = 'Lax'  
+SESSION_COOKIE_SECURE = False 
