@@ -1,0 +1,15 @@
+django-cors-headers
+djangorestframework
+djangorestframework_simplejwt
+djongo==1.3.6
+dnspython
+pymongo==3.12.3
+pytest
+pytest-django
+pytz
+python-dotenv
+bcrypt
+django-storages
+boto3
+redis
+django==4.1.13
