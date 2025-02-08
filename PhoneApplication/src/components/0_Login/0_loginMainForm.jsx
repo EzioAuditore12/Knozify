@@ -8,7 +8,9 @@ function LoginMainForm() {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
     const loginValidationSchema = yup.object().shape({
-        username: yup.string().required('Username is Required'),
+        username: yup
+        .string().
+        required('Username is Required'),
         password: yup
             .string()
             .min(8, ({ min }) => `Password must be at least ${min} characters`)
@@ -17,7 +19,7 @@ function LoginMainForm() {
 
     return (
         <View className="p-2 flex flex-col items-center justify-center">
-            <Text className="font-bold text-gray-700 text-lg mt-4">Login to your account</Text>
+            <Text className="font-bold text-gray-700 text-xl mt-4">Login to your account</Text>
             <Formik
                 validationSchema={loginValidationSchema}
                 initialValues={{ username: '', password: '' }}
@@ -32,7 +34,7 @@ function LoginMainForm() {
                     errors,
                 }) => (
                     <View className="bg-white rounded-3xl flex flex-col gap-y-3 w-full mt-4 mb-4 p-2 shadow-md">
-                        <Text className="font-semibold">Username or Email</Text>
+                        <Text className="font-semibold text-lg text-gray-700">Username or Email</Text>
                         <TextInput
                             className="w-full p-2 border-2 border-black rounded-lg"
                             onChangeText={handleChange('username')}

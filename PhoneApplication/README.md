@@ -159,7 +159,7 @@ npm install
 
   2. React-Native-Vector-Icons
 
-    1. Install the following package:-
+     1. Install the following package:-
 
       ```bash
       npm install --save react-native-vector-icons
@@ -168,7 +168,7 @@ npm install
       For Icons Refrence , you can use:-
       https://oblador.github.io/react-native-vector-icons/
 
-    2. Now in android android/app/build.gradle and add this
+     2. Now in android android/app/build.gradle and add this
 
       ```gradle
       apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
@@ -176,24 +176,24 @@ npm install
 
   3. React-Native-Navigation
 
-    You can follow the docs here of React-Navigation for more :- 
-    https://reactnavigation.org/docs/getting-started
+     You can follow the docs here of React-Navigation for more :- 
+     https://reactnavigation.org/docs/getting-started
     
-    1. Install the follwing packages:-
+     1. Install the follwing packages:-
    
       ```bash
       npm install @react-navigation/native
       npm install react-native-screens react-native-safe-area-context
       ```
 
-    2. Now there are different types of Navigation, we are going to use 2 right now as mentioned:-
+     2. Now there are different types of Navigation, we are going to use 2 right now as mentioned:-
 
         1. Bottom Tabs Navigator
 
-          You can follow these docs for more information:-
+           You can follow these docs for more information:-
           https://reactnavigation.org/docs/bottom-tab-navigator/
 
-          1. Install the follwing package:-
+           1. Install the follwing package:-
 
             ```bash
             npm install @react-navigation/bottom-tabs
