@@ -161,18 +161,18 @@ npm install
 
     1. Install the following package:-
 
-    ```bash
-    npm install --save react-native-vector-icons
-    ``` 
+      ```bash
+      npm install --save react-native-vector-icons
+      ``` 
 
-    For Icons Refrence , you can use:-
-    https://oblador.github.io/react-native-vector-icons/
+      For Icons Refrence , you can use:-
+      https://oblador.github.io/react-native-vector-icons/
 
     2. Now in android android/app/build.gradle and add this
 
-    ```gradle
-    apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
-    ```
+      ```gradle
+      apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+      ```
 
   3. React-Native-Navigation
 
@@ -181,10 +181,10 @@ npm install
     
     1. Install the follwing packages:-
    
-    ```bash
-    npm install @react-navigation/native
-    npm install react-native-screens react-native-safe-area-context
-    ```
+      ```bash
+      npm install @react-navigation/native
+      npm install react-native-screens react-native-safe-area-context
+      ```
 
     2. Now there are different types of Navigation, we are going to use 2 right now as mentioned:-
 
@@ -195,9 +195,9 @@ npm install
 
           1. Install the follwing package:-
 
-          ```bash
-          npm install @react-navigation/bottom-tabs
-          ```
+            ```bash
+            npm install @react-navigation/bottom-tabs
+            ```
 
         2. Stack Navigator
         
@@ -206,11 +206,11 @@ npm install
 
            1. Install the following packages:-
 
-           ```bash
-           npm install @react-navigation/stack
-           npm install react-native-gesture-handler
-           npm install @react-native-masked-view/masked-view
-           ```
+            ```bash
+            npm install @react-navigation/stack
+            npm install react-native-gesture-handler
+            npm install @react-native-masked-view/masked-view
+            ```
 
 
 
