@@ -4,7 +4,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
-function LoginMainForm() {
+function LoginMainForm({onSubmit}) {
     const [isEnabled, setIsEnabled] = useState(true)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
@@ -29,11 +29,12 @@ function LoginMainForm() {
                 onSubmit={(values) => {
                     console.log(values)
                     console.log(toggleSwitch, isEnabled)
+                    onSubmit(values.usernameORemail, values.password)
                 }}
             >
                 {({
                     handleChange,
-                    handleBlur,
+                    setFieldTouched,
                     handleSubmit,
                     values,
                     errors,
@@ -49,7 +50,7 @@ function LoginMainForm() {
                             placeholder="Enter username or email"
                             placeholderTextColor={'#000'}
                             onChangeText={handleChange('usernameORemail')}
-                            onBlur={handleBlur('usernameORemail')}
+                            onBlur={() => setFieldTouched('usernameORemail')}
                             value={values.usernameORemail}
                             multiline={false}
                         />
@@ -65,7 +66,7 @@ function LoginMainForm() {
                             placeholder="Password"
                             placeholderTextColor={'#000'}
                             onChangeText={handleChange('password')}
-                            onBlur={handleBlur('password')}
+                            onBlur={() => setFieldTouched('password')}
                             value={values.password}
                             secureTextEntry
                             multiline={false}

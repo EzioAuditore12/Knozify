@@ -2,14 +2,14 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack';
 
 //Screens
-import Login from '../screens/0_Login'
-import Register from '../screens/0_Register'
+import Login from '../screens/authentication/0_Login'
+import Register from '../screens/authentication/0_Register'
 
 
 const stack = createStackNavigator()
 
 
-const StackScreens = () => {
+const AuthenticationScreens = () => {
   return (
     <stack.Navigator>
         <stack.Screen 
@@ -30,4 +30,4 @@ const StackScreens = () => {
   )
 }
 
-export default StackScreens
+export default AuthenticationScreens
