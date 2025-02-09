@@ -5,7 +5,7 @@ import * as yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
 
-const RegisterMainForm = () => {
+const RegisterMainForm = ({onSubmit}) => {
     const navigation = useNavigation()
     const validationSchema = yup.object().shape({
         //email
@@ -38,6 +38,7 @@ const RegisterMainForm = () => {
             // Add your API call here
             console.log('Form values:', values)
             // Navigate to next screen or show success message
+            onSubmit(values.user_name, values.password, values.phone_number, values.email)
         } catch (error) {
             console.error('Registration error:', error)
         }

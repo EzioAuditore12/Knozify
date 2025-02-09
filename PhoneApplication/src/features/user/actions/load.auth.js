@@ -1,6 +1,6 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import validateAccessToken from '../../../api/validateAccessToken.api';
+import validateAccessToken from '../../../api/authentication/validateAccessToken.api';
 
 export const loadAuth = createAsyncThunk(
     'auth/load',

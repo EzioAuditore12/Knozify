@@ -3,21 +3,20 @@ import axios from 'axios'
 
 const API_URL = Config.API_BASE_URL
 
-export const sendOTP= async(user_name,phone_no,email)=>{
-    try{
+const sendOTP = async(user_name, phone_no, email) => {
+    try {
         if(!user_name && !phone_no && !email){
             console.log("Please enter all the fields")
             throw new Error("All fields are not entered to send the otp")   
         }
-        const result= await axios.post(`${API_URL}/api/user/sendOTP/`,{
+        const result = await axios.post(`${API_URL}/api/user/sendOtp/reg/`, { // Updated endpoint path
             user_name,
             phone_no,
             email
-        }
-        )
+        })
         console.log("OTP sent successfully")
         return result.data
-    }catch(err){
+    } catch(err) {
         console.error('Phone number verification error details:', {
             status: err.response?.status,
             data: err.response?.data,
@@ -26,7 +25,7 @@ export const sendOTP= async(user_name,phone_no,email)=>{
     }
 }
 
-export const registerUser=async(user_name,password,phone_no,email,profile_picture='',otp)=>{
+const registerUser=async(user_name,password,phone_no,email,otp,profile_picture='')=>{
     try{
         if(!user_name && !password && !phone_no && !email && !otp){
             console.log("Please enter all the fields")
@@ -51,3 +50,4 @@ export const registerUser=async(user_name,password,phone_no,email,profile_pictur
     }
 }
 
+export {sendOTP,registerUser}

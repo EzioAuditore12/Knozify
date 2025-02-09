@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser } from "./actions/loginUser.auth";
 import { loadAuth } from "./actions/load.auth";
+import { registerUserAction,verifyOTPuser} from "./actions/registerUser.auth";
 
 const authSlice = createSlice({
     name: 'auth',
@@ -34,6 +35,20 @@ const authSlice = createSlice({
           state.token = action.payload.token;
         })
         .addCase(loginUser.rejected, (state, action) => {
+          state.isAuthLoading = false;
+          state.error = action.error.message;
+        })
+        .addCase(registerUserAction.pending,(state)=>{
+          state.isAuthLoading=true
+          state.error=null
+        })
+        .addCase(registerUserAction.fulfilled,(state,action)=>{
+          state.isAuthLoading = false;
+          state.isAuthenticated = true;
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+        })
+        .addCase(registerUserAction.rejected,(state,action)=>{
           state.isAuthLoading = false;
           state.error = action.error.message;
         })

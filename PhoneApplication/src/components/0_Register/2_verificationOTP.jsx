@@ -1,43 +1,38 @@
-import { View, Text, Image, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { View, Image, Text } from 'react-native'
+import { OtpInput } from "react-native-otp-entry"
 
-const VerificationMain = ({ onSubmitOTP }) => {
-  const [otp, setOtp] = useState('')
+const VerificationOTP = ({onSubmitOTP}) => {
+  const [otp, setOtp] = useState("");
 
-  const handleOtpChange = (text) => {
-    const trimmedText = text.trim()
-    setOtp(trimmedText)
-    if (trimmedText.length === 6) {
-      console.log("OTP Entered:", trimmedText)
-      onSubmitOTP && onSubmitOTP(trimmedText)
-    }
-  }
+  useEffect(() => {
+    if (otp.length === 6) {
+      console.log(otp);
+      onSubmitOTP(otp);
+    }   
+  }, [otp]);
 
   return (
-    <View className='flex-1 bg-slate-100 p-2'>
+    <View className='flex-1 p-3 justify-center items-center gap-y-5'>
       <Image 
         source={require('../../assets/otpIcon.png')}
-        className='w-[150px] h-[150px] mx-auto mt-4 mb-4'
+        className="w-[200px] h-[200px]"
       />
-      <Text className='text-2xl text-center font-bold text-gray-700'>OTP Authentication</Text>
-      <Text className='text-lg text-center font-semibold text-gray-600'>Enter the OTP sent to your phone in messages</Text>
-      <TextInput
-        style={{ 
-          height: 40, 
-          borderColor: 'gray', 
-          borderWidth: 1, 
-          marginTop: 20, 
-          paddingHorizontal: 5, 
-          textAlign: 'center' 
-        }}
+      <Text className="font-semibol text-2xl">Enter OTP</Text>
+      <OtpInput
+        numberOfDigits={6}
+        focusColor="green"
+        autoFocus={true}
+        hideStick={true}
         placeholder="******"
-        keyboardType="string"
-        onChangeText={handleOtpChange}
-        value={otp}
-        maxLength={6}
+        textInputProps={{
+          accessibilityLabel: "One-Time Password",
+          keyboardType: 'numeric'
+        }}
+        onTextChange={(code) => setOtp(code)}
       />
     </View>
   )
 }
 
-export default VerificationMain
+export default VerificationOTP
