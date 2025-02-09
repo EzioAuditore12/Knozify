@@ -4,7 +4,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
-function LoginMainForm() {
+function LoginMainForm({onSubmit}) {
     const [isEnabled, setIsEnabled] = useState(true)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
@@ -29,6 +29,7 @@ function LoginMainForm() {
                 onSubmit={(values) => {
                     console.log(values)
                     console.log(toggleSwitch, isEnabled)
+                    onSubmit((values)=>onSubmit(values.usernameORemail, values.password))
                 }}
             >
                 {({
