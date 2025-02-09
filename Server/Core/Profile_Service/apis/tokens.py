@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
+# TODO: return profile picture of user
+
 def verify_access_token(request):
     """
     **Verifies if access token of client is *correct* or not**
@@ -22,6 +24,7 @@ def verify_access_token(request):
             'user': {
                 '_id': str(user._id),
                 'user_name': user.user_name,
+                'profile_picture' : user.profile_picture,
                 'account_type': user.account_type,
             }
         }, status=status.HTTP_200_OK)
