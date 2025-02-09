@@ -10,7 +10,7 @@ from Profile_Service.apis.authorization.auth import CustomJWTAuthentication
 from .apis.register_handler import send_OTP, verify_registration
 from .apis.login import login_user
 from .apis.tokens import verify_access_token, verify_refresh_token
-
+from .apis.password_change import send_OTP_forPassword, verify_and_change_password
 
 
 class SendOTP_API(APIView):
@@ -88,3 +88,36 @@ class RefreshToken_API(APIView):
     """
     def post(self, request, *args, **kwargs):
         return verify_refresh_token(request=request)
+    
+
+
+class SendOTPforPassChange_API(APIView):
+    """
+    **Sends OTP for password change, if phone number dosn't exist throws error**
+    
+        1. Parameters:
+        - `request` :  request from API
+
+        2. API input:
+        - `phone_no` : phone number of user.
+    """
+    def post(self, request):
+        return send_OTP_forPassword(request=request)
+
+
+class PasswordChange_API(APIView):
+    """
+    Verifies `phone_no` of user and then sends otp,\n
+    if **correct_otp**: allow password change\n
+    else: don't allow.
+    
+        1. Parameters:
+        - `request` :  request from API
+
+        2. API input:
+        - `phone_no` : phone number of user.
+        - `otp` : Otp provided to user.
+        - `password`` : New password user wants to be changed to.
+    """
+    def post(self, request):
+        return verify_and_change_password(request)

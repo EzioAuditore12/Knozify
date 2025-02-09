@@ -4,6 +4,7 @@ from rest_framework import status
 from .models import UserDetails
 from bson import ObjectId
 import json
+import bcrypt
 
 @pytest.fixture
 def api_client():
@@ -18,8 +19,12 @@ def test_user_data():
         "phone_no": "1234567890",
         "account_type": "PB",
         "profile_picture": "",
-        "wallet_id": "-"
+        "wallet_id": "-",
     }
+
+extra_data = {
+    "new_password" : "new_password@12YEEE"
+}
 
 @pytest.mark.django_db
 class TestRegistrationAPIs:
@@ -30,7 +35,7 @@ class TestRegistrationAPIs:
             "user_name": test_user_data["user_name"],
             "email": test_user_data["email"],
         }
-        response = api_client.post('/api/user/sendOtp/', data=data, format='json')
+        response = api_client.post('/api/user/sendOtp/reg/', data=data, format='json')
         assert response.status_code == status.HTTP_200_OK
         assert response.data['status'] == 'sucess'
         assert 'otp' in response.data
@@ -38,7 +43,7 @@ class TestRegistrationAPIs:
     def test_verify_registration(self, api_client, test_user_data):
         """Test OTP verification and user registration"""
         # First send OTP
-        send_otp_response = api_client.post('/api/user/sendOtp/', data={
+        send_otp_response = api_client.post('/api/user/sendOtp/reg/', data={
             "phone_no": test_user_data["phone_no"],
             "user_name": test_user_data["user_name"],
             "email": test_user_data["email"]
@@ -64,7 +69,7 @@ class TestLoginAPIs:
     def create_test_user(self, api_client, test_user_data):
         """Fixture to create a test user"""
         # First send OTP
-        send_otp_response = api_client.post('/api/user/sendOtp/', data={
+        send_otp_response = api_client.post('/api/user/sendOtp/reg/', data={
             "phone_no": test_user_data["phone_no"],
             "user_name": test_user_data["user_name"],
             "email": test_user_data["email"]
@@ -109,7 +114,7 @@ class TestTokenAPIs:
     def authenticated_tokens(self, api_client, test_user_data):
         """Fixture to get authentication tokens"""
         # Create user through registration
-        send_otp_response = api_client.post('/api/user/sendOtp/', data={
+        send_otp_response = api_client.post('/api/user/sendOtp/reg/', data={
             "phone_no": test_user_data["phone_no"],
             "user_name": test_user_data["user_name"],
             "email": test_user_data["email"]
@@ -155,3 +160,75 @@ class TestTokenAPIs:
         
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
         assert response.data['status'] == 'error'
+
+
+@pytest.mark.django_db
+class TestPasswordChangeAPIs:
+    @pytest.fixture
+    def create_test_user(self, api_client, test_user_data):
+        """Fixture to create a test user"""
+        
+        send_otp_response = api_client.post('/api/user/sendOtp/reg/', data={
+            "phone_no": test_user_data["phone_no"],
+            "user_name": test_user_data["user_name"],
+            "email": test_user_data["email"]
+        }, format='json')
+        
+        test_user_data['otp'] = send_otp_response.data['otp']
+        return api_client.post('/api/user/verifyAndReg/', 
+                             data=test_user_data, 
+                             format='json')
+    
+    def test_send_otp(self, api_client, test_user_data, create_test_user): # If you won't put create_test_user (it won't work figured out after 1 hours :) )
+        """Test sending OTP for registration"""
+        data = {
+            "phone_no": test_user_data["phone_no"],
+        }
+        response = api_client.post('/api/user/sendOtp/password/', data=data, format='json')
+        
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data['status'] == 'sucess'
+        assert 'otp' in response.data
+
+    def test_password_change(self, api_client, test_user_data, create_test_user):
+        """Test changing password"""
+        
+        
+        otp_response = api_client.post(
+            '/api/user/sendOtp/password/', 
+            data = {
+                "phone_no": test_user_data["phone_no"],
+            },
+            format='json',
+        )
+
+        assert otp_response.status_code == status.HTTP_200_OK, f"Error API response {otp_response.data['message']}"
+        otp = otp_response.data['otp']
+
+        # Step 2: Change Password
+        new_password = extra_data['new_password']
+        response = api_client.post(
+            '/api/user/changePassword/',
+            data={
+                "phone_no": test_user_data["phone_no"],
+                "otp": otp,
+                "password": new_password,
+            },
+            format='json',
+        )
+
+        assert response.status_code == status.HTTP_200_OK
+
+        # Now checking if password password hashing was correct or not :)
+        test_user = UserDetails.objects.get(user_name=test_user_data['user_name'])
+        
+        changed_password = test_user.password
+        old_password = test_user_data['password']
+
+        password_updated = not bcrypt.checkpw(
+            old_password.encode('utf-8'),
+            changed_password.encode('utf-8')
+        )
+
+        assert password_updated, "Password is not updated, it's the same as before"
+        assert changed_password is not None, "Password is Null... But WHY???"

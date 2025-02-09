@@ -71,7 +71,7 @@ def send_OTP(request):
 
 def verify_registration(request):
     """
-    Verifies OTP using function (that uses redis).
+    Verifies OTP using function (that uses redis), and saves the data of user in database.
     \n
     See `OTP_Sender` class, it has **redis** cache to achieve this.
     """
