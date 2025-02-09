@@ -47,12 +47,12 @@ const RegisterMainForm = () => {
   return (
         <Formik
             validationSchema={validationSchema}
-            initialValues={{ email: '' }}
+            initialValues={{ email: '', phone_number: '', user_name: '', password: '' }} // added missing fields in initialValues if needed
             onSubmit={handleSubmit}
         >
             {({
                 handleChange,
-                handleBlur,
+                setFieldTouched,
                 handleSubmit,
                 values,
                 errors,
@@ -68,7 +68,7 @@ const RegisterMainForm = () => {
                placeholder="Email Address"
                placeholderTextColor={'#000'}
                onChangeText={handleChange('email')}
-               onBlur={handleBlur('email')}
+               onBlur={() => setFieldTouched('email')}
                value={values.email}
                keyboardType="email-address"
                multiline={false}
@@ -83,7 +83,7 @@ const RegisterMainForm = () => {
                placeholder="Phone Number"
                placeholderTextColor={'#000'}
                onChangeText={handleChange('phone_number')}
-               onBlur={handleBlur('phone_number')}
+               onBlur={() => setFieldTouched('phone_number')}
                value={values.phone_number}
                keyboardType="phone-pad"
                 multiline={false}
@@ -98,7 +98,7 @@ const RegisterMainForm = () => {
                placeholder="User Name"
                placeholderTextColor={'#000'}
                onChangeText={handleChange('user_name')}
-               onBlur={handleBlur('user_name')}
+               onBlur={() => setFieldTouched('user_name')}
                value={values.user_name}
                multiline={false}
            />
@@ -112,7 +112,7 @@ const RegisterMainForm = () => {
                placeholder="Password"
                placeholderTextColor={'#000'}
                onChangeText={handleChange('password')}
-               onBlur={handleBlur('password')}
+               onBlur={() => setFieldTouched('password')}
                value={values.password}
                secureTextEntry
                 multiline={false}

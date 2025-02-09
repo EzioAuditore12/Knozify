@@ -34,7 +34,7 @@ function LoginMainForm({onSubmit}) {
             >
                 {({
                     handleChange,
-                    handleBlur,
+                    setFieldTouched,
                     handleSubmit,
                     values,
                     errors,
@@ -50,7 +50,7 @@ function LoginMainForm({onSubmit}) {
                             placeholder="Enter username or email"
                             placeholderTextColor={'#000'}
                             onChangeText={handleChange('usernameORemail')}
-                            onBlur={handleBlur('usernameORemail')}
+                            onBlur={() => setFieldTouched('usernameORemail')}
                             value={values.usernameORemail}
                             multiline={false}
                         />
@@ -66,7 +66,7 @@ function LoginMainForm({onSubmit}) {
                             placeholder="Password"
                             placeholderTextColor={'#000'}
                             onChangeText={handleChange('password')}
-                            onBlur={handleBlur('password')}
+                            onBlur={() => setFieldTouched('password')}
                             value={values.password}
                             secureTextEntry
                             multiline={false}
