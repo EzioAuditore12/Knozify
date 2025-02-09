@@ -29,7 +29,7 @@ function LoginMainForm({onSubmit}) {
                 onSubmit={(values) => {
                     console.log(values)
                     console.log(toggleSwitch, isEnabled)
-                    onSubmit((values)=>onSubmit(values.usernameORemail, values.password))
+                    onSubmit(values.usernameORemail, values.password)
                 }}
             >
                 {({
