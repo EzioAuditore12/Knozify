@@ -3,7 +3,10 @@ import React from 'react'
 
 const UploadVideo = () => {
   return (
-    <View>
+    <View style={{
+      flex:1,
+      backgroundColor:'red'
+    }}>
       <Text>03_UploadVideo</Text>
     </View>
   )
