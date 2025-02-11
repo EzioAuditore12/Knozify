@@ -64,6 +64,7 @@ const BottomTabScreens = () => {
         component={Upload}
         options={{
           tabBarIcon: () => <Icon name="add-circle" color="#00c9a7" size={30} />,
+          headerShown: false
         }}
       />
       <Tabs.Screen

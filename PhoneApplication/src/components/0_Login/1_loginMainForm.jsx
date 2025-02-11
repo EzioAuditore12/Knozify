@@ -4,7 +4,31 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
-function LoginMainForm({onSubmit}) {
+import { OtpInput } from 'react-native-otp-entry'
+
+// Forgot Password Form
+function ForgotPasswordForm() {
+return(
+    <View className='p-2'>
+    <View className="flex flex-col items-center justify-center bg-white rounded-3xl gap-y-5">
+        <Text className='font-semibold text-gray-700 text-2xl'>Enter your Phone No</Text>
+        <TextInput
+            className="w-full p-2 border-2 border-black rounded-lg text-black"
+            placeholder="Enter your phone number"
+            placeholderTextColor={'#000'}
+            multiline={false}
+        />
+        <TouchableOpacity className="p-2 bg-green-500 active:bg-green-200 rounded-md">
+            <Text className="text-white text-center">Send OTP</Text>
+        </TouchableOpacity>
+    </View>
+    </View>
+)
+
+}
+
+
+function LoginForm({onSubmit}) {
     const [isEnabled, setIsEnabled] = useState(true)
     const toggleSwitch = () => setIsEnabled(previousState => !previousState)
 
@@ -113,4 +137,14 @@ function LoginMainForm({onSubmit}) {
     )
 }
 
+
+function LoginMainForm({onSubmit}) {
+    return(
+        <>
+          <LoginForm onSubmit={onSubmit}/>
+
+          {/*<ForgotPasswordForm/>*/}
+        </>
+    )
+}
 export default LoginMainForm
