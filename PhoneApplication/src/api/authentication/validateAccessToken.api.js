@@ -27,4 +27,34 @@ const validateAccessToken = async (access_token) => {
     }
 }
 
-export default validateAccessToken
+
+const generateRefreshToken = async (refresh) => {   
+    try {
+        if (!refresh) {
+            console.log("Unable to fetch refresh token")
+            throw new Error("Refresh token not received")
+        }
+
+        const response = await axios.post(`${API_URL}/api/user/refresh/`, 
+            { 
+                refresh 
+            }, 
+        );
+
+        if (response.data && response.data['new-access']) {
+            console.log('New access token:', response.data['new-access']);
+            return response.data;
+        } else {
+            throw new Error('No access token in response');
+        }
+    } catch (err) {
+        console.error('Refresh token error:', {
+            status: err.response?.status,
+            data: err.response?.data,
+            message: err.message
+        });
+        throw err; // Re-throw to handle it in the calling code
+    }
+}
+
+export  {validateAccessToken,generateRefreshToken}
