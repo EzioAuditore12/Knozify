@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sendOTP,registerUser} from "../../../api/authentication/registerUser.api";
-import validateAccessToken from "../../../api/authentication/validateAccessToken.api";
+import {validateAccessToken} from "../../../api/authentication/validateAccessToken.api";
 
 export const verifyOTPuser=createAsyncThunk(
     'auth/verifyOTP',
@@ -26,6 +26,7 @@ export const registerUserAction=createAsyncThunk(
         }
         await validateAccessToken(result.tokens.access)
         await AsyncStorage.setItem('token', result.tokens.access);
+        await AsyncStorage.setItem('refreshToken',result.tokens.refresh)
         await AsyncStorage.setItem('userData', JSON.stringify(result.user));
         return { token: result.tokens.access, user: result.user };
     }
