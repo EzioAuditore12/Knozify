@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <div className='mt-16 md:ml-[80px] mb-[50px] relative'>
 
-    <div className='flex flex-col md:mr-[100px]'>
+    <div className='flex flex-col md:mr-[105px]'>
       <UserStories/>
       <UserPosts/>
     </div>  
