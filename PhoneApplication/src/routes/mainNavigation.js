@@ -21,9 +21,15 @@ const MainNavigation = () => {
 
   useEffect(() => {
     const init = async () => {
-      dispatch(loadAuth());
+      try {
+        const result = await dispatch(loadAuth()).unwrap(); // If using createAsyncThunk
+        // or
+        // await dispatch(loadAuth()); // If using regular thunk
+      } catch (error) {
+        console.error('Auth loading failed:', error);
+      }
     };
- 
+
     init().finally(async () => {
       await BootSplash.hide({ fade: true });
       console.log("BootSplash has been hidden successfully");
