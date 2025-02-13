@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     BrowserRouter as Router,
     Routes,
@@ -9,21 +9,36 @@ import {
 } from "react-router-dom";
 
 
-//Pages
-import Login from '../pages/authentication/0_Login';
-import Register from '../pages/authentication/0_Register';
-import Home from '../pages/features/1_Home';
+
+//Routes
+import AuthenticationPages from './01_AuthenticationPages';
+import HomeScreenPage from './02_HomeScreenPage';
+
+
+//Authentication
+import { loadAuth } from '../features/user'
+import { useDispatch,useSelector } from 'react-redux'
+
 
 function MainRouting() {
+  const dispatch = useDispatch();
+  const { isAuthenticated, isAuthLoading } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    dispatch(loadAuth());
+  }, [dispatch]);
+
+  if (isAuthLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    )
+  }
+
   return (
     <>
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-      </Routes>
-    </Router>
+    {isAuthenticated ? <Outlet /> : <AuthenticationPages />}
     </>
   )
 }

@@ -3,7 +3,8 @@ import React from 'react'
 
 const Posts=()=>{
     return(
-        <div className='flex flex-col space-y-4 p-4 max-w-[777px]'>
+        <div className='flex flex-col space-y-4 p-4 max-w-[560px] mx-auto'>
+            <h1 className='text-xl font-semibold text-gray-700'>Posts</h1>
             <div className='h-[500px] w-full bg-white rounded-lg p-2'>
                 {/* User Image */}
                 <div className='flex justify-between items-center p-2'>
@@ -32,10 +33,9 @@ const Posts=()=>{
 
 function UserPosts() {
   return (
-    <>
-        <h1 className='text-lg font-semibold text-gray-700 mx-4'>Posts</h1>
+    <div>
         <Posts/>
-    </>
+    </div>
   )
 }
 

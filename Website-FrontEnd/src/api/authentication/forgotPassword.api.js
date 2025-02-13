@@ -1,7 +1,8 @@
-import Config from "react-native-config";
+import dotenv from "dotenv";
+dotenv.config();
 import axios from "axios";
 
-const API_URL = Config.API_BASE_URL;
+const API_URL = process.env.API_BASE_URL;
 
 const sendOtpForgottenPassword=async(phone_no)=>{
     try{
