@@ -1,15 +1,15 @@
 import React from 'react'
-import { BrowserRouter as Routes, Route} from "react-router-dom";
+import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Login from '../pages/authentication/0_Login'
 import Register from '../pages/authentication/0_Register'
 
-
-function AuthenticationPages() {
+const AuthenticationPages = () => {
   return (
     <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   )
 }

@@ -24,9 +24,9 @@ export const registerUserAction=createAsyncThunk(
             throw new Error(result.error)
         }
         await validateAccessToken(result.tokens.access)
-        await AsyncStorage.setItem('token', result.tokens.access);
-        await AsyncStorage.setItem('refreshToken',result.tokens.refresh)
-        await AsyncStorage.setItem('userData', JSON.stringify(result.user));
+        localStorage.setItem('token', result.tokens.access);
+        localStorage.setItem('refreshToken',result.tokens.refresh)
+        localStorage.setItem('userData', JSON.stringify(result.user));
         return { token: result.tokens.access, user: result.user };
     }
 )

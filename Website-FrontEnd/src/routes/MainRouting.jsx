@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     BrowserRouter as Router,
     Routes,
@@ -7,17 +7,17 @@ import {
     useNavigate,
     Outlet,
 } from "react-router-dom";
-import AuthenticationPages from './01_AuthenticationPages';
+
 
 
 //Routes
-
+import AuthenticationPages from './01_AuthenticationPages';
+import HomeScreenPage from './02_HomeScreenPage';
 
 
 //Authentication
 import { loadAuth } from '../features/user'
 import { useDispatch,useSelector } from 'react-redux'
-import { ActivityIndicator } from 'react-native'
 
 
 function MainRouting() {
@@ -30,11 +30,9 @@ function MainRouting() {
 
   if (isAuthLoading) {
     return (
-    <div className="flex-1 justify-center items-center bg-white">
-    <div className="transform scale-150">
-            <ActivityIndicator size="large" color="#28A361" />
-       </div>
-    </div>
+      <div className="flex justify-center items-center h-screen bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
     )
   }
 
