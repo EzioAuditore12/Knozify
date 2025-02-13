@@ -88,6 +88,7 @@ const BottomTabScreens = () => {
             ) : (
               <Icon name="person" color={color} size={30} />
             ),
+            headerShown: false,
         }}
       />
     </Tabs.Navigator>
