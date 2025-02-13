@@ -8,6 +8,9 @@ import MainNavigation from './routes/mainNavigation'
 import {Provider} from 'react-redux'
 import store from './app/store'
 
+//Splash Screen
+import BootSplash from "react-native-bootsplash";
+
 const App = () => {
   return (
     <Provider store={store}>
