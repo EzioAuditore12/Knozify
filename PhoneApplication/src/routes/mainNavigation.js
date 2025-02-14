@@ -11,12 +11,29 @@ import { useDispatch,useSelector } from 'react-redux'
 import { ActivityIndicator } from 'react-native'
 
 
+//Splash Screen
+import BootSplash from "react-native-bootsplash";
+
+
 const MainNavigation = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, isAuthLoading } = useSelector(state => state.auth);
 
   useEffect(() => {
-    dispatch(loadAuth());
+    const init = async () => {
+      try {
+        const result = await dispatch(loadAuth()).unwrap(); // If using createAsyncThunk
+        // or
+        // await dispatch(loadAuth()); // If using regular thunk
+      } catch (error) {
+        console.error('Auth loading failed:', error);
+      }
+    };
+
+    init().finally(async () => {
+      await BootSplash.hide({ fade: true });
+      console.log("BootSplash has been hidden successfully");
+    });
   }, [dispatch]);
 
   if (isAuthLoading) {
