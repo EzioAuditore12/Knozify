@@ -3,7 +3,7 @@ from rest_framework import status
 from bcrypt import checkpw
 
 # Private Libraries
-from Profile_Service.models import UserDetails
+from Authentication_Service.models import UserDetails
 
 # JWT authentications
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -52,7 +52,8 @@ def login_user(request):
                 'user': {
                     '_id': str(user._id),
                     'username': user.user_name,
-                    'account_type': user.account_type
+                    'profile_picture' : user.profile_picture,
+                    'account_type': user.account_type,
                 }
             }, status=status.HTTP_200_OK)
 

@@ -8,8 +8,8 @@ from rest_framework import status
 from django.core.cache import cache
 
 # Private Libraries
-from Profile_Service.searializer import UserDetailsSearlizer
-from Profile_Service.models import UserDetails
+from Authentication_Service.searializer import UserDetailsSearlizer
+from Authentication_Service.models import UserDetails
 from .otp_handlers.otp_handler import OTP_Sender
 
 # JWT authentication

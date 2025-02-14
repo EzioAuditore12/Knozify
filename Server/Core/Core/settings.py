@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), '127.0.0.1']
 CORS_ALLOW_ALL_ORIGINS = True
 
 
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     # Services (Apps)
+    'Authentication_Service',
     'Profile_Service',
 ]
 
@@ -118,8 +119,8 @@ REST_FRAMEWORK = {
 
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=int(os.environ.get('ACCESS_SECONDS'))),
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=int(os.environ.get('REFRESH_SECONDS'))),
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD': '_id',  # Use `_id` instead of `id` because of fookin MongoDb Object Ids
     'USER_ID_CLAIM': 'user_id',  # Claim name in the token if needed

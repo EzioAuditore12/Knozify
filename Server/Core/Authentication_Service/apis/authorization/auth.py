@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from bson import ObjectId  # Import ObjectId for MongoDB queries
-from Profile_Service.models import UserDetails
+from Authentication_Service.models import UserDetails
 
 class CustomJWTAuthentication(JWTAuthentication):
     def get_user(self, validated_token):
