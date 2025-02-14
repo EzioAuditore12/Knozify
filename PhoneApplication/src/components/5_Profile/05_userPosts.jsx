@@ -2,7 +2,6 @@ import { View, Text, Image, Modal, TouchableOpacity, BackHandler,ScrollView } fr
 import React,{useRef, useState, useEffect, useCallback} from 'react'
 import VideoPlayer from 'react-native-video-player';
 import Icon from 'react-native-vector-icons/MaterialIcons';
- import Icon2 from 'react-native-vector-icons/Ionicons'
 
 const UserProfilePosts = ({ userPosts = [] }) => { 
   console.log('UserPosts received:', userPosts); // Add this debug log
@@ -62,7 +61,7 @@ const UserProfilePosts = ({ userPosts = [] }) => {
   }, []);
 
   return (
-    <ScrollView className='flex-1'>
+    <ScrollView >
     <View className='px-4 mb-[60px] mt-[30px]'>
       {userPosts.map((post, index) => (
         <View 
@@ -149,8 +148,6 @@ const UserProfilePosts = ({ userPosts = [] }) => {
           </View>
 
         
-          
-
           {/* Stats */}
           <View className='flex-row justify-between border-t border-gray-200 pt-3'>
             <Text>{post.likes} likes</Text>
