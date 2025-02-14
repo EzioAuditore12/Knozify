@@ -1,12 +1,15 @@
 import { View, Text,ScrollView } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+//components
 import ProfileHeader from '../../components/5_Profile/01_profileHeader'
 import UserAvatar from '../../components/5_Profile/02_userAvatar'
 import UserDetails from '../../components/5_Profile/03_userDetails'
 import UserStories from '../../components/5_Profile/04_userStories'
 import UserProfilePosts from '../../components/5_Profile/05_userPosts'
+import UserReels from '../../components/5_Profile/06_userReels';
 
 const userDetails={
   userName: 'Daksh',
@@ -105,6 +108,7 @@ const userStatus = [
 
 const userPosts = [
   {
+    id: '1',
     userName: 'Daksh',
     userAvatar: 'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg',
     postVideo: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
@@ -117,35 +121,78 @@ const userPosts = [
     shares: 2
   },
   {
-      userName: 'Manas',
-      userAvatar: 'https://res.cloudinary.com/dpcloud123/image/upload/v1737165276/gbykpdwgflraoypp9rsi.jpg',
-      timestamp: '1 hour ago',
-      postImage: 'https://res.cloudinary.com/dpcloud123/image/upload/v1737170301/twbxmfx4bevi0usu8cst.png',
-      postTitle: 'New Project Alert!',
-      postContent: 'Just started working on a new project. Stay tuned for more updates!',
-      postTags: ['#django', '#backend'],
-      likes: 25,
-      comments: [],
-      shares: 5
-      },
-      {
-      userName: 'Vikas',
-      userAvatar: 'https://i.pravatar.cc/150?img=3',
-      postImage: '',
-      timestamp: '2 hours ago',
-      postTitle: 'Weekend Vibes!',
-      postContent: 'Enjoying the weekend with my friends. #weekendvibes',
-      postTags: ['#weekend', '#friends'],
-      likes: 30,
-      comments: [],
-      shares: 10
+    id: '2',
+    userName: 'Manas',
+    userAvatar: 'https://res.cloudinary.com/dpcloud123/image/upload/v1737165276/gbykpdwgflraoypp9rsi.jpg',
+    timestamp: '1 hour ago',
+    postImage: 'https://res.cloudinary.com/dpcloud123/image/upload/v1737170301/twbxmfx4bevi0usu8cst.png',
+    postTitle: 'New Project Alert!',
+    postContent: 'Just started working on a new project. Stay tuned for more updates!',
+    postTags: ['#django', '#backend'],
+    likes: 25,
+    comments: [],
+    shares: 5
+  },
+  {
+    id: '3',
+    userName: 'Vikas',
+    userAvatar: 'https://i.pravatar.cc/150?img=3',
+    postImage: '',
+    timestamp: '2 hours ago',
+    postTitle: 'Weekend Vibes!',
+    postContent: 'Enjoying the weekend with my friends. #weekendvibes',
+    postTags: ['#weekend', '#friends'],
+    likes: 30,
+    comments: [],
+    shares: 10
   }
 ]
 
+
+const ProfileTabs = createMaterialTopTabNavigator();
+
+// Add this wrapper component before MyTabsProfile
+const PostsWrapper = () => {
+  return <UserProfilePosts userPosts={userPosts} />;
+};
+
+function MyTabsProfile(){
+    return(
+        <ProfileTabs.Navigator
+          screenOptions={{
+            tabBarStyle: { 
+              backgroundColor: 'white',
+              elevation: 0,
+              shadowOpacity: 0
+            },
+            tabBarIndicatorStyle: { 
+              backgroundColor: '#9AE6C6',
+              height: 3
+            },
+            tabBarLabelStyle: { 
+              color: 'black', 
+              fontWeight: 'bold',
+              textTransform: 'uppercase'
+            }
+          }}
+        >
+            <ProfileTabs.Screen 
+              name='Posts' 
+              component={PostsWrapper}
+              options={{
+                tabBarLabel: `Posts (${userPosts.length})`
+              }}
+            />
+            <ProfileTabs.Screen name='Reels' component={UserReels}/>
+        </ProfileTabs.Navigator>
+    )
+}
+
 const UserProfile = () => {
   return (
-    <ScrollView className='flex-1'>
-    <LinearGradient
+    <View className='flex-1'>
+      <View className='flex-1 min-h-[120px]'>
+        <LinearGradient
               colors={[
            '#9AE6C6',
            '#A6E9CD',    
@@ -178,11 +225,12 @@ const UserProfile = () => {
       </View>
       <UserStories stories={userStatus}/>
       </LinearGradient>
-     <ScrollView className='mt-[10px] p-2'>
-      <UserProfilePosts userPosts={userPosts}/>
-     </ScrollView>
-   
-  </ScrollView>
+      
+      </View>
+      <View className='flex-1'>
+        <MyTabsProfile/>
+      </View>
+    </View>
   )
 }
 

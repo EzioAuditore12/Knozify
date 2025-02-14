@@ -1,12 +1,24 @@
-import { View, Text, Image, Modal, TouchableOpacity, BackHandler } from 'react-native'
+import { View, Text, Image, Modal, TouchableOpacity, BackHandler,ScrollView } from 'react-native'
 import React,{useRef, useState, useEffect, useCallback} from 'react'
 import VideoPlayer from 'react-native-video-player';
 import Icon from 'react-native-vector-icons/MaterialIcons';
  import Icon2 from 'react-native-vector-icons/Ionicons'
 
 const UserProfilePosts = ({ userPosts = [] }) => { 
+  console.log('UserPosts received:', userPosts); // Add this debug log
 
-  if (!userPosts?.length) return null 
+  if (!userPosts?.length) {
+    return (
+      <View className='flex-1 p-4 justify-center items-center'>
+        <Icon name='post-add' size={80} color='#9AE6C6' />
+        <Text className='text-gray-500 mt-4 text-lg'>No posts yet</Text>
+        <Text className='text-gray-400 text-center mt-2'>
+          Share your first post with your followers
+        </Text>
+      </View>
+    );
+  }
+
   const playerRef = useRef({});
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -50,12 +62,8 @@ const UserProfilePosts = ({ userPosts = [] }) => {
   }, []);
 
   return (
-    <>
-        <View className='flex-row items-center px-4 gap-x-1 mb-[20px]'>
-                <Text className='text-lg font-semibold text-gray-600'>Posts</Text>
-                <Icon2 name='grid' size={20} color='#64748b'/>
-             </View>
-    <View className='mb-[60px]'>
+    <ScrollView className='flex-1'>
+    <View className='px-4 mb-[60px] mt-[30px]'>
       {userPosts.map((post, index) => (
         <View 
           key={index} 
@@ -175,7 +183,7 @@ const UserProfilePosts = ({ userPosts = [] }) => {
         </TouchableOpacity>
       </Modal>
     </View>
-    </>
+    </ScrollView>
   )
 }
 
