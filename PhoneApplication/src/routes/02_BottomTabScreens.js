@@ -11,10 +11,15 @@ import Upload from '../screens/features/3_Upload';
 import Reel from '../screens/features/4_Reel';
 import UserProfile from '../screens/features/5_UserProfile';
 
+//User
+import { useSelector, useDispatch } from 'react-redux';
+
 const Tabs = createBottomTabNavigator();
 
 const BottomTabScreens = () => {
-  const [userDetails, setUserDetails] = useState(null);
+ const {user} = useSelector(state => state.auth);
+ 
+ const userImage = user?.profile_picture;
 
   const fetchUserDetails = async () => {
     try {
@@ -80,9 +85,9 @@ const BottomTabScreens = () => {
         component={UserProfile}
         options={{
           tabBarIcon: ({ color, size }) =>
-            userDetails?.profile_picture ? (
+            userImage ? (
               <Image
-                source={{ uri: userDetails.profile_picture }}
+                source={{ uri: userImage }}
                 className='w-[30px] h-[30px] rounded-full'
               />
             ) : (
