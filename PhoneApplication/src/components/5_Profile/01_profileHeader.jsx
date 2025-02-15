@@ -30,7 +30,7 @@ const EditButton=()=>{
 const ProfileHeader = ({userDetails}) => {
   return (
     <View className='flex-row items-center w-full p-2 justify-between '>
-      <UserLogoutOptions userName={userDetails.userName}/>
+      <UserLogoutOptions userName={userDetails.user_name}/>
         
         <View className='flex-row gap-x-2'>
         <EditButton/>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'  // <-- added useState
+import React, { useState,useEffect } from 'react'  // <-- added useState
 import { View, Text, ScrollView, Dimensions } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -10,17 +10,8 @@ import UserDetails from '../../components/5_Profile/03_userDetails'
 import UserStories from '../../components/5_Profile/04_userStories'
 import UserProfilePosts from '../../components/5_Profile/05_userPosts'
 import UserReels from '../../components/5_Profile/06_userReels'
-
-const userDetails = {
-  userName: 'Daksh',
-  userAvatar:
-    'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg',
-  userWalletPoints: 100,
-  userCustomName: '@dakshpurohit',
-  Following: 100,
-  Posts: 29,
-  Followers: 1000
-}
+import { getUserDetails } from '../../api/Profile/profile.details'
+import { useSelector } from 'react-redux'
 
 const userStatus = [
   {
@@ -155,8 +146,6 @@ const userPosts = [
   }
 ]
 
-const windowHeight = Dimensions.get('window').height
-
 const ProfileTabs = createMaterialTopTabNavigator()
 
 // Wrapper component for posts screen
@@ -208,16 +197,36 @@ const ReelsWrapper = () => (
     )
   }
   
+
+  // User Profile
   const UserProfile = () => {
     const [gradientHeight, setGradientHeight] = useState(0)
+    
 
     const onGradientLayout = (event) => {
       const { height } = event.nativeEvent.layout
       setGradientHeight(height)
     }
 
+    const { user } = useSelector((state) => state.auth)
+    const [userDetails, setUserDetails] = useState({})
+
+    const fetchUserDetails = async () => {
+      try {
+        const result = await getUserDetails(user._id)
+        setUserDetails(result.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    useEffect(() => {
+      fetchUserDetails()
+    }, [])
+
+    console.log(userDetails)
     return (
-      <ScrollView contentContainerStyle={{ flexGrow:1, height: gradientHeight }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 /* removed height: gradientHeight */ }}>
         <View className="flex-1">
           <LinearGradient
             onLayout={onGradientLayout} // <-- added onLayout handler
@@ -240,12 +249,16 @@ const ReelsWrapper = () => (
           >
             <View className="items-center mb-[20px]">
               <ProfileHeader userDetails={userDetails} />
-              <UserAvatar userAvatar={userDetails.userAvatar} />
+              <UserAvatar userDetails={{
+                user_name: userDetails.user_name,
+                profile_picture: userDetails.profile_picture
+              }} />
+              
               <UserDetails
                 userDetails={{
-                  posts: userDetails.Posts,
-                  followers: userDetails.Followers,
-                  following: userDetails.Following
+                  posts: userDetails.post_counts,
+                  followers: userDetails.follower_counts,
+                  following: userDetails.following_counts
                 }}
               />
             </View>
