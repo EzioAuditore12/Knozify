@@ -15,8 +15,9 @@ const UserAvatar = ({userDetails}) => {
         className='absolute rounded-full h-[120px] w-[120px]'
       />
     </View>
+    {/*<Text className='text-lg font-semibold mt-1 text-gray-500 text-center'>Daksh Purohit</Text>*/}
     <Text className='text-2xl font-bold mt-4 text-gray-600 text-center'>@{userDetails.user_name}</Text>
-    {/*<Text className='text-lg font-semibold mt-1 text-gray-500 text-center'>@dakshpurohit</Text>*/}
+
     </View>
   )
 }
