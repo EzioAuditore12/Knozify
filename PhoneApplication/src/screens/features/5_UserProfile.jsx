@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import React, { useState,useEffect } from 'react'  // <-- added useState
+import { View, Text, ScrollView, Dimensions } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { useIsFocused } from '@react-navigation/native'
 
 // components
 import ProfileHeader from '../../components/5_Profile/01_profileHeader'
@@ -11,17 +10,8 @@ import UserDetails from '../../components/5_Profile/03_userDetails'
 import UserStories from '../../components/5_Profile/04_userStories'
 import UserProfilePosts from '../../components/5_Profile/05_userPosts'
 import UserReels from '../../components/5_Profile/06_userReels'
-
-const userDetails = {
-  userName: 'Daksh',
-  userAvatar:
-    'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg',
-  userWalletPoints: 100,
-  userCustomName: '@dakshpurohit',
-  Following: 100,
-  Posts: 29,
-  Followers: 1000
-}
+import { getUserDetails } from '../../api/Profile/profile.details'
+import { useSelector } from 'react-redux'
 
 const userStatus = [
   {
@@ -160,104 +150,125 @@ const ProfileTabs = createMaterialTopTabNavigator()
 
 // Wrapper component for posts screen
 const PostsWrapper = () => (
-  <View style={{ flex: 1 }}>
-    <UserProfilePosts userPosts={userPosts} />
-  </View>
-)
+    <View style={{ flex: 1 }}>
+      <UserProfilePosts userPosts={userPosts} />
+    </View>
+  )
 
 const ReelsWrapper = () => (
-  <View style={{ flex: 1 }}>
-    <UserReels />
-  </View>
-)
+    <View style={{ flex: 1 }}>
+      <UserReels />
+    </View>
+  )
 
-function MyTabsProfile() {
-  return (
-    <ProfileTabs.Navigator
-      screenOptions={{
-        tabBarStyle: {
-          backgroundColor: 'white',
-          elevation: 0,
-          shadowOpacity: 0
-        },
-        tabBarIndicatorStyle: {
-          backgroundColor: '#9AE6C6',
-          height: 3
-        },
-        tabBarLabelStyle: {
-          color: 'black',
-          fontWeight: 'bold',
-          textTransform: 'uppercase'
-        }
-      }}
-    >
-      <ProfileTabs.Screen
-        name="Posts"
-        component={PostsWrapper}
-        options={{
-          tabBarLabel: `Posts (${userPosts.length})`
+  function MyTabsProfile() {
+    return (
+      <ProfileTabs.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: 'white',
+            elevation: 0,
+            shadowOpacity: 0
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: '#9AE6C6',
+            height: 3
+          },
+          tabBarLabelStyle: {
+            color: 'black',
+            fontWeight: 'bold',
+            textTransform: 'uppercase'
+          }
         }}
-      />
-      <ProfileTabs.Screen 
-        name="Reels" 
-        component={ReelsWrapper} 
-        options={{ tabBarLabel: 'Reels' }}
-      />
-    </ProfileTabs.Navigator>
-  )
-}
-
-const UserProfile = () => {
-  const [gradientHeight, setGradientHeight] = useState(0)
-  const isFocused = useIsFocused()
-
-  const onGradientLayout = (event) => {
-    const { height } = event.nativeEvent.layout
-    setGradientHeight(height)
+      >
+        <ProfileTabs.Screen
+          name="Posts"
+          component={PostsWrapper}
+          options={{
+            tabBarLabel: `Posts (${userPosts.length})`
+          }}
+        />
+        <ProfileTabs.Screen 
+          name="Reels" 
+          component={ReelsWrapper} 
+          options={{ tabBarLabel: 'Reels' }}
+        />
+      </ProfileTabs.Navigator>
+    )
   }
+  
 
-  return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, height: gradientHeight }}>
-      <View className="flex-1">
-        <LinearGradient
-          onLayout={onGradientLayout}
-          colors={[
-            '#9AE6C6',
-            '#A6E9CD',
-            '#B2ECD4',
-            '#BEEFDA',
-            '#D7F5E9',
-            '#F1FBF7',
-            'white',
-            'white',
-            'white',
-            'white',
-            'white'
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          className="flex-1 items-center"
-        >
-          <View className="items-center mb-[20px]">
-            <ProfileHeader userDetails={userDetails} />
-            <UserAvatar userAvatar={userDetails.userAvatar} />
-            <UserDetails
-              userDetails={{
-                posts: userDetails.Posts,
-                followers: userDetails.Followers,
-                following: userDetails.Following
-              }}
-            />
-          </View>
-          {/*<UserStories stories={userStatus} />*/}
-        </LinearGradient>
+  // User Profile
+  const UserProfile = () => {
+    const [gradientHeight, setGradientHeight] = useState(0)
+    
 
+    const onGradientLayout = (event) => {
+      const { height } = event.nativeEvent.layout
+      setGradientHeight(height)
+    }
+
+    const { user } = useSelector((state) => state.auth)
+    const [userDetails, setUserDetails] = useState({})
+
+    const fetchUserDetails = async () => {
+      try {
+        const result = await getUserDetails(user._id)
+        setUserDetails(result.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    useEffect(() => {
+      fetchUserDetails()
+    }, [])
+
+    console.log(userDetails)
+    return (
+      <ScrollView contentContainerStyle={{ flexGrow: 1 /* removed height: gradientHeight */ }}>
         <View className="flex-1">
-          {isFocused ? <MyTabsProfile /> : <ActivityIndicator size="large" color="#0000ff" />}
+          <LinearGradient
+            onLayout={onGradientLayout} // <-- added onLayout handler
+            colors={[
+              '#9AE6C6',
+              '#A6E9CD',
+              '#B2ECD4',
+              '#BEEFDA',
+              '#D7F5E9',
+              '#F1FBF7',
+              'white',
+              'white',
+              'white',
+              'white',
+              'white'
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            className="flex-1 items-center"
+          >
+            <View className="items-center mb-[20px]">
+              <ProfileHeader userDetails={userDetails} />
+              <UserAvatar userAvatar={userDetails.userAvatar} />
+              
+              <UserDetails
+                userDetails={{
+                  posts: userDetails.post_counts,
+                  followers: userDetails.follower_counts,
+                  following: userDetails.following_counts
+                }}
+              />
+            </View>
+            {/*<UserStories stories={userStatus} />*/}
+          </LinearGradient>
+    
+          {/* Tab Navigator Container */}
+          <View className='flex-1'>
+            <MyTabsProfile />
+          </View>
         </View>
-      </View>
-    </ScrollView>
-  )
-}
+      </ScrollView>
+    )
+  }
 
 export default UserProfile
