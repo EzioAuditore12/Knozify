@@ -249,7 +249,10 @@ const ReelsWrapper = () => (
           >
             <View className="items-center mb-[20px]">
               <ProfileHeader userDetails={userDetails} />
-              <UserAvatar userAvatar={userDetails.userAvatar} />
+              <UserAvatar userDetails={{
+                user_name: userDetails.user_name,
+                profile_picture: userDetails.profile_picture
+              }} />
               
               <UserDetails
                 userDetails={{
