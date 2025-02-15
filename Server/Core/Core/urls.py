@@ -24,5 +24,6 @@ urlpatterns = [
 
     path('api/user/', include('Authentication_Service.urls')),
     path('api/profile/', include('Profile_Service.urls')),
+    path('api/stream/', include('Streaming_Service.urls')),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

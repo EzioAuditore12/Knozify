@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Services (Apps)
     'Authentication_Service',
     'Profile_Service',
+    'Streaming_Service',
 ]
 
 MIDDLEWARE = [
