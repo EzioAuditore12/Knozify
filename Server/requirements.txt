@@ -3,6 +3,8 @@ djangorestframework
 djangorestframework_simplejwt
 djongo==1.3.6
 dnspython
+ffmpeg-python
+opencv-python
 pymongo==3.12.3
 pytest
 pytest-django
