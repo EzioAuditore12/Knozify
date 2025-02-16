@@ -10,7 +10,7 @@ import UserDetails from '../../components/5_Profile/03_userDetails'
 import UserStories from '../../components/5_Profile/04_userStories'
 import UserProfilePosts from '../../components/5_Profile/05_userPosts'
 import UserReels from '../../components/5_Profile/06_userReels'
-import { getUserDetails } from '../../api/Profile/profile.details'
+
 import { useSelector } from 'react-redux'
 
 const userStatus = [
@@ -98,76 +98,39 @@ const userStatus = [
   }
 ]
 
-const userPosts = [
-  {
-    id: '1',
-    userName: 'Daksh',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg',
-    postVideo:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    timestamp: '30 mins ago',
-    postTitle: 'Beautiful Morning!',
-    postContent:
-      'Starting my day with a perfect cup of coffee ☕ and getting ready to code',
-    postTags: ['#coding', '#react', '#react native'],
-    likes: 10,
-    comments: [],
-    shares: 2
-  },
-  {
-    id: '2',
-    userName: 'Manas',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737165276/gbykpdwgflraoypp9rsi.jpg',
-    timestamp: '1 hour ago',
-    postImage:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737170301/twbxmfx4bevi0usu8cst.png',
-    postTitle: 'New Project Alert!',
-    postContent:
-      'Just started working on a new project. Stay tuned for more updates!',
-    postTags: ['#django', '#backend'],
-    likes: 25,
-    comments: [],
-    shares: 5
-  },
-  {
-    id: '3',
-    userName: 'Vikas',
-    userAvatar: 'https://i.pravatar.cc/150?img=3',
-    postImage: '',
-    timestamp: '2 hours ago',
-    postTitle: 'Weekend Vibes!',
-    postContent: 'Enjoying the weekend with my friends. #weekendvibes',
-    postTags: ['#weekend', '#friends'],
-    likes: 30,
-    comments: [],
-    shares: 10
-  }
-]
+
+//User API
+import { getUserDetails } from '../../api/Profile/profile.details'
+import { getUserPosts } from '../../api/Profile/profile.getPosts'
 
 const ProfileTabs = createMaterialTopTabNavigator()
 
-// Wrapper component for posts screen
-const PostsWrapper = () => (
+const UserProfile = () => {
+  const [gradientHeight, setGradientHeight] = useState(0)
+  const { user } = useSelector((state) => state.auth)
+  const [userDetails, setUserDetails] = useState({})
+  const [userPosts, setUserPosts] = useState([])
+
+  const PostsWrapper = () => (
     <View style={{ flex: 1 }}>
       <UserProfilePosts userPosts={userPosts} />
     </View>
   )
 
-const ReelsWrapper = () => (
+  const ReelsWrapper = () => (
     <View style={{ flex: 1 }}>
       <UserReels />
     </View>
   )
 
-  function MyTabsProfile() {
+  // MyTabsProfile moved inside UserProfile to access userPosts
+  const MyTabsProfile = () => {
     return (
       <ProfileTabs.Navigator
         screenOptions={{
           tabBarStyle: {
             backgroundColor: 'white',
-            elevation: 0,
+
             shadowOpacity: 0
           },
           tabBarIndicatorStyle: {
@@ -185,7 +148,7 @@ const ReelsWrapper = () => (
           name="Posts"
           component={PostsWrapper}
           options={{
-            tabBarLabel: `Posts (${userPosts.length})`
+            tabBarLabel: `Posts ${userPosts?.length ? `(${userPosts.length})` : ''}`
           }}
         />
         <ProfileTabs.Screen 
@@ -196,82 +159,80 @@ const ReelsWrapper = () => (
       </ProfileTabs.Navigator>
     )
   }
-  
 
-  // User Profile
-  const UserProfile = () => {
-    const [gradientHeight, setGradientHeight] = useState(0)
-    
-
-    const onGradientLayout = (event) => {
-      const { height } = event.nativeEvent.layout
-      setGradientHeight(height)
-    }
-
-    const { user } = useSelector((state) => state.auth)
-    const [userDetails, setUserDetails] = useState({})
-
-    const fetchUserDetails = async () => {
-      try {
-        const result = await getUserDetails(user._id)
-        setUserDetails(result.data)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    useEffect(() => {
-      fetchUserDetails()
-    }, [])
-
-    console.log(userDetails)
-    return (
-      <ScrollView contentContainerStyle={{ flexGrow: 1 /* removed height: gradientHeight */ }}>
-        <View className="flex-1">
-          <LinearGradient
-            onLayout={onGradientLayout} // <-- added onLayout handler
-            colors={[
-              '#9AE6C6',
-              '#A6E9CD',
-              '#B2ECD4',
-              '#BEEFDA',
-              '#D7F5E9',
-              '#F1FBF7',
-              'white',
-              'white',
-              'white',
-              'white',
-              'white'
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            className="flex-1 items-center"
-          >
-            <View className="items-center mb-[20px]">
-              <ProfileHeader userDetails={userDetails} />
-              <UserAvatar userDetails={{
-                user_name: userDetails.user_name,
-                profile_picture: userDetails.profile_picture
-              }} />
-              
-              <UserDetails
-                userDetails={{
-                  posts: userDetails.post_counts,
-                  followers: userDetails.follower_counts,
-                  following: userDetails.following_counts
-                }}
-              />
-            </View>
-            {/*<UserStories stories={userStatus} />*/}
-          </LinearGradient>
-    
-          {/* Tab Navigator Container */}
-          <View className='flex-1'>
-            <MyTabsProfile />
-          </View>
-        </View>
-      </ScrollView>
-    )
+  const onGradientLayout = (event) => {
+    const { height } = event.nativeEvent.layout
+    setGradientHeight(height)
   }
+
+  const fetchUserDetails = async () => {
+    try {
+      const result = await getUserDetails(user._id)
+      setUserDetails(result.data)
+    } catch (err) {
+      console.error("Error fetching user details:", err.response ? err.response.data : err.message)
+    }
+  }
+
+  const fetchUserPosts = async () => {
+    try {
+      const posts = await getUserPosts(user._id);
+      setUserPosts(posts);
+    } catch (err) {
+      console.error("Error fetching user posts:", err.response ? err.response.data : err.message);
+    }
+  }
+
+  useEffect(() => {
+    if (user && user._id) {
+      fetchUserDetails()
+      fetchUserPosts()
+    }
+  }, [user])
+
+  return (
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      {/* Header Section */}
+      <LinearGradient
+        onLayout={onGradientLayout}
+        colors={[
+          '#9AE6C6',
+          '#A6E9CD',
+          '#B2ECD4',
+          '#BEEFDA',
+          '#D7F5E9',
+          '#F1FBF7',
+          'white',
+          'white',
+          'white',
+          'white',
+          'white'
+        ]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        className="items-center"  // Removed flex-1 to let content stack naturally
+      >
+        {/* ...existing code... */}
+        <ProfileHeader userDetails={userDetails} />
+        <UserAvatar userDetails={{
+          user_name: userDetails.user_name,
+          profile_picture: userDetails.profile_picture
+        }} />
+        <UserDetails
+          userDetails={{
+            posts: userDetails.post_counts,
+            followers: userDetails.follower_counts,
+            following: userDetails.following_counts
+          }}
+        />
+        {/* ...existing code... */}
+      </LinearGradient>
+
+      {/* Tabs Section */}
+      {/* Removed wrapping View with flex-1 for a seamless sequential flow */}
+      <MyTabsProfile />
+    </ScrollView>
+  )
+}
 
 export default UserProfile
