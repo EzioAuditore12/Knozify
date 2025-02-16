@@ -16,15 +16,59 @@ import { getUserPosts } from '../../api/Profile/profile.getPosts'
 
 const ProfileTabs = createMaterialTopTabNavigator()
 
+const PostsWrapper = ({ userPosts }) => (
+  <View style={{ flex: 1 }}>
+    <UserProfilePosts userPosts={userPosts} />
+  </View>
+)
+
+const ReelsWrapper = () => (
+  <View style={{ flex: 1 }}>
+    <UserReels />
+  </View>
+)
+
+
+const MyTabsProfile = ({ postCount, userPosts }) => {
+  return (
+    <ProfileTabs.Navigator
+      screenOptions={{
+        tabBarStyle: { backgroundColor: 'white', shadowOpacity: 0 },
+        tabBarIndicatorStyle: { backgroundColor: '#9AE6C6', height: 3 },
+        tabBarLabelStyle: {
+          color: 'black',
+          fontWeight: 'bold',
+          textTransform: 'uppercase'
+        }
+      }}
+    >
+      <ProfileTabs.Screen
+        name="Posts"
+        children={() => <PostsWrapper userPosts={userPosts} />}
+        options={{
+          tabBarLabel: `Posts ${postCount ? `(${postCount})` : ''}`
+        }}
+      />
+      <ProfileTabs.Screen
+        name="Reels"
+        component={ReelsWrapper}
+        options={{ tabBarLabel: 'Reels' }}
+      />
+    </ProfileTabs.Navigator>
+  )
+}
+
 const UserProfile = () => {
   const { user } = useSelector((state) => state.auth)
-  const [userDetails, setUserDetails] = useState({})
-  const [userPosts, setUserPosts] = useState([])
+  const [profile, setProfile] = useState({ details: {}, posts: [] })
 
   const fetchUserDetails = async () => {
     try {
       const result = await getUserDetails(user._id)
-      setUserDetails(result.data)
+      setProfile(prev => ({
+        ...prev,
+        details: result.data
+      }))
     } catch (err) {
       console.error(
         "Error fetching user details:",
@@ -36,7 +80,10 @@ const UserProfile = () => {
   const fetchUserPosts = async () => {
     try {
       const posts = await getUserPosts(user._id)
-      setUserPosts(posts)
+      setProfile(prev => ({
+        ...prev,
+        posts: posts
+      }))
     } catch (err) {
       console.error(
         "Error fetching user posts:",
@@ -46,52 +93,11 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    if (user && user._id) {
+    if (user?._id) {
       fetchUserDetails()
       fetchUserPosts()
     }
-  }, [user])
-
-  const PostsWrapper = () => (
-    <View style={{ flex: 1 }}>
-      <UserProfilePosts userPosts={userPosts} />
-    </View>
-  )
-
-  const ReelsWrapper = () => (
-    <View style={{ flex: 1 }}>
-      <UserReels />
-    </View>
-  )
-
-  const MyTabsProfile = () => {
-    return (
-      <ProfileTabs.Navigator
-        screenOptions={{
-          tabBarStyle: { backgroundColor: 'white', shadowOpacity: 0 },
-          tabBarIndicatorStyle: { backgroundColor: '#9AE6C6', height: 3 },
-          tabBarLabelStyle: {
-            color: 'black',
-            fontWeight: 'bold',
-            textTransform: 'uppercase'
-          }
-        }}
-      >
-        <ProfileTabs.Screen
-          name="Posts"
-          component={PostsWrapper}
-          options={{
-            tabBarLabel: `Posts ${userPosts?.length ? `(${userPosts.length})` : ''}`
-          }}
-        />
-        <ProfileTabs.Screen
-          name="Reels"
-          component={ReelsWrapper}
-          options={{ tabBarLabel: 'Reels' }}
-        />
-      </ProfileTabs.Navigator>
-    )
-  }
+  }, [user?._id])
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -114,22 +120,25 @@ const UserProfile = () => {
         end={{ x: 0, y: 1 }}
         className="items-center"
       >
-        <ProfileHeader userDetails={userDetails} />
+        <ProfileHeader userDetails={profile.details} />
         <UserAvatar
           userDetails={{
-            user_name: userDetails.user_name,
-            profile_picture: userDetails.profile_picture
+            user_name: profile.details.user_name,
+            profile_picture: profile.details.profile_picture
           }}
         />
         <UserDetails
           userDetails={{
-            posts: userDetails.post_counts,
-            followers: userDetails.follower_counts,
-            following: userDetails.following_counts
+            posts: profile.details.post_counts,
+            followers: profile.details.follower_counts,
+            following: profile.details.following_counts
           }}
         />
       </LinearGradient>
-      <MyTabsProfile />
+      <MyTabsProfile
+        postCount={profile.posts.length}
+        userPosts={profile.posts}
+      />
     </ScrollView>
   )
 }
