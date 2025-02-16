@@ -28,6 +28,18 @@ def follow_person(request):
         
         
         follower = UserDetails.objects.get(_id=follower_id)
+
+        already_followed = Following.objects.filter(
+            follower = follower,
+            followee = followee,
+        )
+
+        if already_followed:
+            return Response({
+                'status':'error',
+                'message':'Account is already being followed',
+            }, status=status.HTTP_406_NOT_ACCEPTABLE)
+
         follow_now = Following(
             follower = follower,
             followee = followee,

@@ -15,6 +15,7 @@ class Posts(models.Model):
     likes = models.IntegerField(default=0)
     shares = models.IntegerField(default=0)
     upload_time = models.DateTimeField(auto_now_add=True)
+    post_type = models.CharField(max_length=10, default='Text')
 
     # Now adding either video or image
     image_link = models.CharField(max_length=300, null=True)
