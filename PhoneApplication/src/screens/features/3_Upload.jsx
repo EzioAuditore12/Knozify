@@ -19,10 +19,7 @@ function MyTabs() {
           backgroundColor: 'transparent',
           elevation: 0,       // Remove shadow on Android
           shadowOpacity: 0,    // Remove shadow on iOS
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
+          height: 50,
         },
         tabBarIndicatorStyle: {
           backgroundColor: 'transparent', // Remove indicator line
