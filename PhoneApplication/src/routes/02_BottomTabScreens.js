@@ -21,20 +21,6 @@ const BottomTabScreens = () => {
  
  const userImage = user?.profile_picture;
 
-  const fetchUserDetails = async () => {
-    try {
-      const result = await AsyncStorage.getItem('userData');
-      if (result) {
-        setUserDetails(JSON.parse(result));
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
 
   return (
     <Tabs.Navigator
