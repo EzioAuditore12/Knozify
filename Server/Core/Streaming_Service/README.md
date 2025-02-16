@@ -5,7 +5,7 @@ Will be used to upload or get posts of users through `uploader_id` or user_id of
 ### Upload Posts *(Post request)*
 End point:
 ```bash
-http://65.0.179.194:7256/api/stream/upload/post/
+http://{{your-port}}/api/stream/upload/post/
 ```
 #### Example Input:
 #### For Video
@@ -20,7 +20,7 @@ This will upload the video post of user.
 
 ## Get All Post of User *(Get request)*
 ```bash
-http://65.0.179.194:7256/api/stream/get/posts/
+http://{{your-port}}/api/stream/get/posts/
 ```
 #### Example Input
 ```json
@@ -46,7 +46,7 @@ http://65.0.179.194:7256/api/stream/get/posts/
 			"post_uploaded_ago": "29 minutes ago",
 			"uploader_details": {
 				"user_name": "manas12",
-				"profile_picture": "http://65.0.179.194:7256/static/default-profile.jpg"
+				"profile_picture": "http://{{your-port}}/static/default-profile.jpg"
 			}
 		},
 		{
@@ -62,7 +62,7 @@ http://65.0.179.194:7256/api/stream/get/posts/
 			"post_uploaded_ago": "22 minutes ago",
 			"uploader_details": {
 				"user_name": "manas12",
-				"profile_picture": "http://65.0.179.194:7256/static/default-profile.jpg"
+				"profile_picture": "http://{{your-port}}/static/default-profile.jpg"
 			}
 		},
 		{
@@ -78,7 +78,7 @@ http://65.0.179.194:7256/api/stream/get/posts/
 			"post_uploaded_ago": "21 minutes ago",
 			"uploader_details": {
 				"user_name": "manas12",
-				"profile_picture": "http://65.0.179.194:7256/static/default-profile.jpg"
+				"profile_picture": "http://{{your-port}}/static/default-profile.jpg"
 			}
 		}
 	]
