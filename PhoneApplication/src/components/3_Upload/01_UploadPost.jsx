@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, Button, Image, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TextInput, Button, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -6,10 +6,13 @@ import { pick, types } from '@react-native-documents/picker'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import uploadPost from '../../api/Upload/upload.post'
 
 const UploadPost = ({}) => {
   const [selectedImage, setSelectedImage] = useState(null)
   const [selectedVideo, setSelectedVideo] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
  
   const { user } = useSelector((state) => state.auth)
 
@@ -44,19 +47,42 @@ const UploadPost = ({}) => {
   }
 
   const validationSchema = yup.object().shape({
-    // Post Title
     post_title: yup.string().required('Post Title is Required'),
-    // Post Content
     post_content: yup.string().required('Post Content is Required'),
-    // post_video
-    post_video: yup.string(),
-    // post_photo
-    post_photo: yup.string()
   })
+
+  // Add media validation function
+  const validateMedia = () => {
+    if (!selectedImage && !selectedVideo) {
+      setError('Please select either an image or video')
+      return false
+    }
+    return true
+  }
+
+  // Loading Overlay Component
+  const LoadingOverlay = () => (
+    isLoading && (
+      <View style={{
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000
+      }}>
+        <ActivityIndicator size="large" color="#9AE6C6" />
+        <Text style={{ color: 'white', marginTop: 10 }}>Uploading post...</Text>
+      </View>
+    )
+  )
 
   return (
     <ScrollView>
+      <LoadingOverlay />
       <View className='p-2 flex-1'>
+        {error && <Text className='text-red-500 mb-2'>{error}</Text>}
         <Text className='text-black font-bold text-2xl mb-[20px]'>Upload Post</Text>
         <View className='flex-row gap-x-1'>
           <Image source={{
@@ -71,12 +97,35 @@ const UploadPost = ({}) => {
         </View>
         <Formik
           validationSchema={validationSchema}
-          initialValues={{ post_title: '', post_content: '', post_video: '', post_photo: '' }}
-          onSubmit={(values) => {
-            console.log({ ...values,
-              post_photo: selectedImage ? selectedImage.uri : '',
-              post_video: selectedVideo ? selectedVideo.uri : ''
-            })
+          initialValues={{ post_title: '', post_content: '' }}
+          onSubmit={async (values) => {
+            try {
+              if (!validateMedia()) return;
+              
+              setIsLoading(true)
+              setError(null)
+              
+              await uploadPost(
+                user._id,
+                values.post_title,
+                values.post_content,
+                selectedImage,
+                selectedVideo
+              )
+
+              // Reset form and states after successful upload
+              setSelectedImage(null)
+              setSelectedVideo(null)
+              values.post_title = ''
+              values.post_content = ''
+              
+              // Optional: Add navigation or success message here
+              
+            } catch (err) {
+              setError(err.message || 'Failed to upload post')
+            } finally {
+              setIsLoading(false)
+            }
           }}
         >
           {({
@@ -148,7 +197,11 @@ const UploadPost = ({}) => {
                   multiline={true}
                 />
                 {errors.post_content && touched.post_content && <Text className='text-red-500'>{errors.post_content}</Text>}
-                <Button onPress={handleSubmit} title="Submit" disabled={!isValid} />
+                <Button 
+                  onPress={handleSubmit} 
+                  title="Submit" 
+                  disabled={!isValid || isLoading} 
+                />
               </View>
             </>
           )}
