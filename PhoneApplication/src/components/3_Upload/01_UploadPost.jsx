@@ -47,7 +47,7 @@ const UploadPost = ({}) => {
 
   return (
     <ScrollView>
-      <View className='p-2 flex-1 mb-[200px]'>
+      <View className='p-2 flex-1 '>
         <Text className='text-black font-bold text-2xl mb-[20px]'>Upload Post</Text>
         <View className='flex-row gap-x-1'>
           <Image source={{
@@ -90,7 +90,7 @@ const UploadPost = ({}) => {
                 {errors.post_title && touched.post_title && <Text>{errors.post_title}</Text>}
 
                 <TextInput
-                  className='border-2 rounded-lg min-h-[90%]'
+                  className='border-2 rounded-lg min-h-[230px]'
                   name="post_content"
                   textAlignVertical='top'
                   placeholder='Post Content'
