@@ -36,8 +36,20 @@ const UserProfilePosts = ({ userPosts }) => {
   return (
     <ScrollView className='p-3'>
       {userPosts?.map((post, index) => (
-        <View key={index} className="bg-white mb-4 rounded-lg p-2">
-          <View className="flex-row items-center p-4">
+        <View key={index} 
+        className='p-4 bg-white mb-2 rounded-2xl'
+          style={{
+            elevation: 8, // Android elevation
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.15,
+            shadowRadius: 3.84,
+          }}
+        >
+          <View className="flex-row items-center p-2">
             <Image
               source={{ uri: post.uploader_details.profile_picture }}
               className="w-10 h-10 rounded-full"

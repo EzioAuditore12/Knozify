@@ -188,7 +188,7 @@ const UserProfile = () => {
       fetchUserDetails()
       fetchUserPosts()
     }
-  }, [user])
+  }, [])
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -225,11 +225,7 @@ const UserProfile = () => {
             following: userDetails.following_counts
           }}
         />
-        {/* ...existing code... */}
       </LinearGradient>
-
-      {/* Tabs Section */}
-      {/* Removed wrapping View with flex-1 for a seamless sequential flow */}
       <MyTabsProfile />
     </ScrollView>
   )
