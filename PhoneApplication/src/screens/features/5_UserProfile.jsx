@@ -222,7 +222,7 @@ const ReelsWrapper = () => (
 
     useEffect(() => {
       fetchUserDetails()
-    }, [])
+    }, [userDetails])
 
     console.log(userDetails)
     return (
