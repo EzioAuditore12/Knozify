@@ -2,11 +2,13 @@ import React, { useRef, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import VideoPlayer from 'react-native-video-player';
 import ImageViewing from 'react-native-image-viewing';
+import { useIsFocused } from '@react-navigation/native';
 
 const UserProfilePosts = ({ userPosts }) => {
   const playerRef = useRef({});
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const isFocused = useIsFocused();
 
   const renderPostContent = (post) => {
     if (post.post_type === 'Video') {
@@ -15,7 +17,8 @@ const UserProfilePosts = ({ userPosts }) => {
           ref={(ref) => (playerRef.current[post.id] = ref)}
           customStyles={{
             wrapper: { alignSelf: 'center', width: '100%', overflow: 'hidden' },
-            video: { borderRadius: 10 },
+            video: { borderRadius: 10,backgroundColor: 'black' },
+            videoWrapper: { borderRadius: 10 },
           }}
           endWithThumbnail
           thumbnail={{ uri: post.thumbnail_link }}
@@ -23,6 +26,7 @@ const UserProfilePosts = ({ userPosts }) => {
           onError={(e) => console.log(e)}
           showDuration={true}
           repeat={true}
+          paused={!isFocused}
           fullScreenOnLongPress={true}
         />
       );
