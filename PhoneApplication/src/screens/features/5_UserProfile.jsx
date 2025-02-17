@@ -97,7 +97,7 @@ const UserProfile = () => {
       fetchUserDetails()
       fetchUserPosts()
     }
-  }, [user?._id])
+  }, [user?._id,profile])
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>

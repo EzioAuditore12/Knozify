@@ -13,6 +13,7 @@ const UploadPost = ({}) => {
   const [selectedVideo, setSelectedVideo] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [successMsg, setSuccessMsg] = useState(null)
  
   const { user } = useSelector((state) => state.auth)
 
@@ -51,15 +52,6 @@ const UploadPost = ({}) => {
     post_content: yup.string().required('Post Content is Required'),
   })
 
-  // Add media validation function
-  const validateMedia = () => {
-    if (!selectedImage && !selectedVideo) {
-      setError('Please select either an image or video')
-      return false
-    }
-    return true
-  }
-
   // Loading Overlay Component
   const LoadingOverlay = () => (
     isLoading && (
@@ -79,31 +71,45 @@ const UploadPost = ({}) => {
   )
 
   return (
-    <ScrollView>
+    <ScrollView 
+      className="bg-white flex-1"
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <LoadingOverlay />
-      <View className='p-2 flex-1'>
-        {error && <Text className='text-red-500 mb-2'>{error}</Text>}
-        <Text className='text-black font-bold text-2xl mb-[20px]'>Upload Post</Text>
-        <View className='flex-row gap-x-1'>
-          <Image source={{
-            uri: user.profile_picture
-          }}
-          className='w-[60px] h-[60px] rounded-full'
+      <View className="p-4 flex-1 pb-20"> {/* Added pb-20 for bottom padding */}
+        {error && (
+          <Text className="text-red-500 mb-4 p-3 bg-red-100 rounded-lg">
+            {error}
+          </Text>
+        )}
+        {successMsg && (
+          <Text className="text-green-700 mb-4 p-3 bg-green-100 rounded-lg">
+            {successMsg}
+          </Text>
+        )}
+        <Text className="text-black font-bold text-2xl mb-6">Upload Post</Text>
+        
+        {/* User Info Section */}
+        <View className="flex-row items-center space-x-3 mb-6">
+          <Image
+            source={{ uri: user.profile_picture }}
+            className="w-[60px] h-[60px] rounded-full border-2 border-gray-200"
           />
-          <View className='flex-col'>
-            <Text className='text-black font-bold'>{user.user_name}</Text>
-            <Text className='text-gray-400'>Public</Text>
+          <View className="flex-col">
+            <Text className="text-black font-bold text-lg">{user.user_name}</Text>
+            <Text className="text-gray-500">Public</Text>
           </View>
         </View>
+
         <Formik
           validationSchema={validationSchema}
           initialValues={{ post_title: '', post_content: '' }}
           onSubmit={async (values) => {
             try {
-              if (!validateMedia()) return;
-              
               setIsLoading(true)
               setError(null)
+              setSuccessMsg(null)
               
               await uploadPost(
                 user._id,
@@ -119,7 +125,12 @@ const UploadPost = ({}) => {
               values.post_title = ''
               values.post_content = ''
               
-              // Optional: Add navigation or success message here
+              setSuccessMsg('Post uploaded successfully! 🎉')
+              
+              // Auto-hide success message after 3 seconds
+              setTimeout(() => {
+                setSuccessMsg(null)
+              }, 3000)
               
             } catch (err) {
               setError(err.message || 'Failed to upload post')
@@ -137,73 +148,105 @@ const UploadPost = ({}) => {
             touched,
             isValid
           }) => (
-            <>
-              <View className='p-2 flex-col gap-y-4'>
-                <TextInput
-                  className='border-2 rounded-lg'
-                  placeholder='Post Title'
-                  placeholderTextColor='gray'
-                  name="post_title"
-                  onChangeText={handleChange('post_title')}
-                  onBlur={handleBlur('post_title')}
-                  value={values.post_title}
-                />
-                {errors.post_title && touched.post_title && <Text className='text-red-500'>{errors.post_title}</Text>}
+            <View className="space-y-4">
+              <TextInput
+                className="border border-gray-300 rounded-lg p-3 bg-gray-50 text-black"
+                placeholder="Post Title"
+                placeholderTextColor="gray"
+                name="post_title"
+                onChangeText={handleChange('post_title')}
+                onBlur={handleBlur('post_title')}
+                value={values.post_title}
+              />
+              {errors.post_title && touched.post_title && (
+                <Text className="text-red-500 text-sm">{errors.post_title}</Text>
+              )}
 
-                {/* Media Options Section: Only one of photo or video can be selected */}
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 8 }}>
-                  {(!selectedImage && !selectedVideo) ? (
-                    <>
-                      <TouchableOpacity onPress={handlePickImage}>
-                        <Icon name="image" size={30} color="#000" />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={handlePickVideo}>
-                        <Icon name="videocam" size={30} color="#000" />
-                      </TouchableOpacity>
-                    </>
-                  ) : (
-                    <>
-                      {selectedImage && (
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <Image source={{ uri: selectedImage.uri }} style={{ width: 60, height: 60, borderRadius: 4 }} />
-                          <TouchableOpacity onPress={() => setSelectedImage(null)}>
-                            <Icon name="close" size={20} color="red" style={{ marginLeft: 8 }} />
-                          </TouchableOpacity>
+              {/* Media Options Section */}
+              <View className="flex-row justify-center space-x-8 py-4 bg-gray-50 rounded-lg">
+                {(!selectedImage && !selectedVideo) ? (
+                  <>
+                    <TouchableOpacity 
+                      onPress={handlePickImage}
+                      className="items-center space-y-2"
+                    >
+                      <Icon name="image" size={32} color="#4B5563" />
+                      <Text className="text-gray-600">Add Image</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      onPress={handlePickVideo}
+                      className="items-center space-y-2"
+                    >
+                      <Icon name="videocam" size={32} color="#4B5563" />
+                      <Text className="text-gray-600">Add Video</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <View className="flex-row items-center justify-center w-full">
+                    {selectedImage && (
+                      <View className="flex-row items-center bg-gray-100 p-2 rounded-lg">
+                        <Image 
+                          source={{ uri: selectedImage.uri }} 
+                          className="w-[80px] h-[80px] rounded-lg"
+                        />
+                        <TouchableOpacity 
+                          onPress={() => setSelectedImage(null)}
+                          className="ml-2 p-2"
+                        >
+                          <Icon name="close" size={24} color="#EF4444" />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                    {selectedVideo && (
+                      <View className="flex-row items-center bg-gray-100 p-2 rounded-lg">
+                        <View className="w-[80px] h-[80px] bg-gray-200 rounded-lg justify-center items-center">
+                          <Icon name="videocam" size={32} color="#4B5563" />
                         </View>
-                      )}
-                      {selectedVideo && (
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <View style={{ width: 60, height: 60, backgroundColor: '#ccc', justifyContent: 'center', alignItems: 'center' }}>
-                            <Icon name="videocam" size={30} color="#000" />
-                          </View>
-                          <TouchableOpacity onPress={() => setSelectedVideo(null)}>
-                            <Icon name="close" size={20} color="red" style={{ marginLeft: 8 }} />
-                          </TouchableOpacity>
-                        </View>
-                      )}
-                    </>
-                  )}
-                </View>
-
-                <TextInput
-                  className='border-2 rounded-lg min-h-[230px]'
-                  name="post_content"
-                  textAlignVertical='top'
-                  placeholder='Post Content'
-                  placeholderTextColor='gray'
-                  onChangeText={handleChange('post_content')}
-                  onBlur={handleBlur('post_content')}
-                  value={values.post_content}
-                  multiline={true}
-                />
-                {errors.post_content && touched.post_content && <Text className='text-red-500'>{errors.post_content}</Text>}
-                <Button 
-                  onPress={handleSubmit} 
-                  title="Submit" 
-                  disabled={!isValid || isLoading} 
-                />
+                        <TouchableOpacity 
+                          onPress={() => setSelectedVideo(null)}
+                          className="ml-2 p-2"
+                        >
+                          <Icon name="close" size={24} color="#EF4444" />
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                )}
               </View>
-            </>
+
+              <TextInput
+                className="border border-gray-300 rounded-lg p-3 min-h-[230px] bg-gray-50 text-black"
+                name="post_content"
+                textAlignVertical="top"
+                placeholder="Write your post content here..."
+                placeholderTextColor="gray"
+                onChangeText={handleChange('post_content')}
+                onBlur={handleBlur('post_content')}
+                value={values.post_content}
+                multiline={true}
+              />
+              {errors.post_content && touched.post_content && (
+                <Text className="text-red-500 text-sm">{errors.post_content}</Text>
+              )}
+
+              <TouchableOpacity
+                onPress={handleSubmit}
+                disabled={!isValid || isLoading}
+                className={`py-3 px-6 rounded-lg ${
+                  !isValid || isLoading 
+                    ? 'bg-gray-300' 
+                    : 'bg-blue-500'
+                } mt-6`}
+              >
+                <Text className={`text-center font-bold ${
+                  !isValid || isLoading 
+                    ? 'text-gray-500' 
+                    : 'text-white'
+                }` }>
+                  {isLoading ? 'Uploading...' : 'Submit Post'}
+                </Text>
+              </TouchableOpacity>
+            </View>
           )}
         </Formik>
       </View>
