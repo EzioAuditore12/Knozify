@@ -163,7 +163,7 @@ const UploadPost = ({}) => {
               )}
 
               {/* Media Options Section */}
-              <View className="flex-row justify-center space-x-8 py-4 bg-gray-50 rounded-lg">
+              <View className="flex-row justify-start gap-x-3 py-4 bg-white rounded-lg">
                 {(!selectedImage && !selectedVideo) ? (
                   <>
                     <TouchableOpacity 

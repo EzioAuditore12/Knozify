@@ -40,10 +40,10 @@ function MyTabs() {
           bottom: 0,
           left: 0,
           right: 0,
-          display: keyboardStatus ? 'none' : 'flex', // Hide tab bar when keyboard is visible
+          display: keyboardStatus ? 'none' : 'flex', 
         },
         tabBarIndicatorStyle: {
-          backgroundColor: 'transparent', // Remove indicator line
+          backgroundColor: 'transparent',
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
@@ -52,7 +52,7 @@ function MyTabs() {
       }}
       sceneContainerStyle={{ 
         backgroundColor: 'white',
-        paddingBottom: 50, // Add padding to prevent content from being hidden behind tabs
+        paddingBottom: 50,
       }}
     >
       <Tab.Screen name="Post" component={UploadPost} />
