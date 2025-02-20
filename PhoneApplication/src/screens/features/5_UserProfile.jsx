@@ -13,6 +13,7 @@ import UserReels from '../../components/5_Profile/06_userReels'
 
 import { getUserDetails } from '../../api/Profile/profile.details'
 import { getUserPosts } from '../../api/Profile/profile.getPosts'
+import { getUserReels } from '../../api/Profile/profile.getReels'
 
 const ProfileTabs = createMaterialTopTabNavigator()
 
@@ -22,14 +23,14 @@ const PostsWrapper = ({ userPosts }) => (
   </View>
 )
 
-const ReelsWrapper = () => (
+const ReelsWrapper = ({userReels}) => (
   <View style={{ flex: 1 }}>
     <UserReels />
   </View>
 )
 
 
-const MyTabsProfile = ({ postCount, userPosts }) => {
+const MyTabsProfile = ({ postCount, userPosts, reelCount,userReels }) => {
   return (
     <ProfileTabs.Navigator
       screenOptions={{
@@ -51,8 +52,10 @@ const MyTabsProfile = ({ postCount, userPosts }) => {
       />
       <ProfileTabs.Screen
         name="Reels"
-        component={ReelsWrapper}
-        options={{ tabBarLabel: 'Reels' }}
+        children={() => <ReelsWrapper userReels={userReels} />}
+        options={{ 
+          tabBarLabel: `Reels ${reelCount ? `(${reelCount})` : ''}`
+          }}   
       />
     </ProfileTabs.Navigator>
   )
@@ -60,7 +63,7 @@ const MyTabsProfile = ({ postCount, userPosts }) => {
 
 const UserProfile = () => {
   const { user } = useSelector((state) => state.auth)
-  const [profile, setProfile] = useState({ details: {}, posts: [] })
+  const [profile, setProfile] = useState({ details: {}, posts: [],reels: [] })
 
   const fetchUserDetails = async () => {
     try {
@@ -92,12 +95,28 @@ const UserProfile = () => {
     }
   }
 
+  const fetchUserReels = async () => {
+    try {
+      const reels = await getUserReels(user._id)
+      setProfile(prev => ({
+        ...prev,
+        reels: reels
+      }))
+    } catch (err) {
+      console.error(
+        "Error fetching user reels:",
+        err.response ? err.response.data : err.message
+      )
+    }
+  }
+
   useEffect(() => {
     if (user?._id) {
       fetchUserDetails()
       fetchUserPosts()
+      fetchUserReels()
     }
-  }, [user?._id,profile])
+  }, [])
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -138,6 +157,8 @@ const UserProfile = () => {
       <MyTabsProfile
         postCount={profile.posts.length}
         userPosts={profile.posts}
+        reelCount={profile.reels.length}
+        userReels={profile.reels}
       />
     </ScrollView>
   )

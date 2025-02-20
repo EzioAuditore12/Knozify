@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-function UserReels() {
+function UserReels({UserReels}) {
   return (
     <View className='flex-1 p-4'>
       <View className='flex-row items-center justify-between mb-4'>
