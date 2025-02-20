@@ -25,7 +25,7 @@ const PostsWrapper = ({ userPosts }) => (
 
 const ReelsWrapper = ({userReels}) => (
   <View style={{ flex: 1 }}>
-    <UserReels />
+    <UserReels userReels={userReels}/>
   </View>
 )
 
