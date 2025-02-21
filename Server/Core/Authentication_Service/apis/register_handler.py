@@ -116,7 +116,8 @@ def verify_registration(request):
                     'user': {
                         '_id': str(user._id),
                         'username': user.user_name,
-                        'account_type': user.account_type
+                        'account_type': user.account_type,
+                        'profile_picture' : user.profile_picture
                     }
                 }, status=status.HTTP_202_ACCEPTED)
             else:

@@ -41,6 +41,7 @@ class Reels(models.Model):
     likes = models.IntegerField(default=0)
     shares = models.IntegerField(default=0)
     thumbnail_link = models.CharField(max_length=300)
+    gif_link = models.CharField(max_length=300, null=True)
     video_link = models.CharField(max_length=300, null=True)
     upload_time = models.DateTimeField(auto_now_add=True)
 

@@ -6,6 +6,8 @@ from .apis.reels.get_uploded_reels import get_uploads
 from .apis.posts.uploadPost_api import upload_post
 from .apis.posts.getPost_api import get_posts
 
+# Needs posts to be set such that it sorts with time
+
 class UploadPost_API(APIView):
     """
     Upload the given Post to **AWS S3**\n
@@ -50,7 +52,7 @@ class GetUploadedReels_API(APIView):
     1. `uploader_id`: User ID of person who's Reel uploads you want.
     """
 
-    def get(self, request):
+    def post(self, request):
         return get_uploads(request)
     
 
@@ -63,5 +65,5 @@ class GetUploadedPosts_API(APIView):
     1. `uploader_id`: User ID of person who's Posts uploads you want.
     """
 
-    def get(self, request):
+    def post(self, request):
         return get_posts(request)

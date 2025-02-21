@@ -6,7 +6,9 @@ from rest_framework.response import Response
 from Authentication_Service.models import UserDetails
 from Streaming_Service.models import Reels
 from .s3_uploader import upload_to_S3
-from .utils import generate_thumbnail, convert_to_mp4
+from .convert_to_mp4 import convert_to_mp4
+from .generate_thumbnail import generate_thumbnail
+from .generate_gif import generate_gif
 
 def upload_reel(request):
     """
@@ -40,7 +42,26 @@ def upload_reel(request):
                 'message': f'Error converting video: {str(e)}'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        # Generate thumbnail first
+        # GIF
+        video.seek(0)
+        try:
+            gif = generate_gif(video)
+            video.seek(0)
+        except Exception as e:
+            return Response({
+                'status' : 'error',
+                'message' : f'Error generating GIF: {e}',
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Upload GIF
+        gif_upload = upload_to_S3(gif)
+        if gif_upload[0] is None:
+            return Response({
+                'status': 'error',
+                'message': f'Error uploading GIF: {gif_upload[1]}'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        video.seek(0)
         try:
             thumbnail = generate_thumbnail(video)
             # Reset video file pointer to beginning for next operation
@@ -66,13 +87,16 @@ def upload_reel(request):
                 'status' : 'error',
                 'message' : f'Error uploading thumbnail: {thumbnail_upload[1]}'
             }, status=status.HTTP_400_BAD_REQUEST)
+    
+
 
         media = Reels(
             uploader=user,
             title=title,
             description=description,
             video_link=uploaded[0],
-            thumbnail_link=thumbnail_upload[0]
+            thumbnail_link=thumbnail_upload[0],
+            gif_link = gif_upload[0]
         )
 
         media.save()
@@ -82,6 +106,7 @@ def upload_reel(request):
             'video_path': uploaded[0],
             'thumbnail': thumbnail_upload[0],
             'uploader': user.user_name,
+            'gif_link' : gif_upload[0]
         }, status=status.HTTP_201_CREATED)
     
     except Exception as e:
