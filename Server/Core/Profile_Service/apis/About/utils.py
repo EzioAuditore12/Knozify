@@ -10,8 +10,8 @@ def get_post_counts(user_id: ObjectId):
     :param user_id: Object User Id of user.
     """
     user = UserDetails.objects.get(_id=user_id)
-    count = int(Posts.objects.filter(followee=user).count())
-    return 0
+    count = int(Posts.objects.filter(uploader=user).count())
+    return count
 
 
 def get_follower_counts(user_id: ObjectId) -> int:
