@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import React, { useState, useEffect ,useCallback} from 'react'
+import { View, Text, ScrollView, Dimensions ,RefreshControl } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { useSelector } from 'react-redux'
@@ -118,9 +118,33 @@ const UserProfile = () => {
     }
   }, [])
 
-  return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      {/* Header Section */}
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    Promise.all([
+      fetchUserDetails(),
+      fetchUserPosts(),
+      fetchUserReels()
+    ]).finally(() => {
+      setRefreshing(false);
+    });
+  }, []);
+
+  const ProfileSection = () => (
+    <ScrollView 
+      contentContainerStyle={{ 
+        flexGrow: 0,
+        paddingBottom: 0,
+        marginBottom: 0  
+      }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      scrollEnabled={true}
+      nestedScrollEnabled={true}
+      style={{ flexGrow: 0 }}
+    >
       <LinearGradient
         colors={[
           '#9AE6C6',
@@ -138,6 +162,7 @@ const UserProfile = () => {
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         className="items-center"
+        style={{ marginBottom: 0 }} // Remove any margin from gradient
       >
         <ProfileHeader userDetails={profile.details} />
         <UserAvatar
@@ -154,14 +179,20 @@ const UserProfile = () => {
           }}
         />
       </LinearGradient>
+    </ScrollView>
+  );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <ProfileSection />
       <MyTabsProfile
         postCount={profile.posts.length}
         userPosts={profile.posts}
         reelCount={profile.reels.length}
         userReels={profile.reels}
       />
-    </ScrollView>
-  )
+    </View>
+  );
 }
 
 export default UserProfile
