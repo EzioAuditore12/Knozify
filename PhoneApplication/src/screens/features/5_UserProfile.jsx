@@ -162,7 +162,7 @@ const UserProfile = () => {
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         className="items-center"
-        style={{ marginBottom: 0 }} // Remove any margin from gradient
+        style={{ marginBottom: 0 }} 
       >
         <ProfileHeader userDetails={profile.details} />
         <UserAvatar
