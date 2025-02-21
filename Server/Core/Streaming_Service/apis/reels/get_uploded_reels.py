@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from Authentication_Service.models import UserDetails
 from Streaming_Service.models import Reels
-
+from Streaming_Service.apis.posts.utils import get_time_ago
 
 class CommentsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,16 +30,36 @@ def get_uploads(request):
                 'message':'Incorrect User id (user id to sahi se copy karle)',
             },status=status.HTTP_400_BAD_REQUEST)
         
-
-        video_links = Reels.objects.filter(
-            uploader = user
-        ).values_list('video_link', flat=True)
+        # Get all posts for the user
+        reels = Reels.objects.filter(uploader=user).values(
+            'title',
+            'description',
+            'likes',
+            'shares',
+            'thumbnail_link',
+            'gif_link',
+            'video_link',
+            'upload_time',
+        )
+        
+        # Convert posts queryset to list and add user details
+        response_data = []
+        for reel in reels:
+            reel_data = {
+                **reel,
+                'reel_uploaded_ago': get_time_ago(reel['upload_time']),
+                'uploader_details': {
+                    'user_name': user.user_name,
+                    'profile_picture': user.profile_picture
+                }
+            }
+            response_data.append(reel_data)
 
         
 
         return Response({
             'status':'success',
-            'links': video_links,
+            'reels': response_data,
         }, status=status.HTTP_200_OK)
 
 
