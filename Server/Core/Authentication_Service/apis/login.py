@@ -51,7 +51,7 @@ def login_user(request):
                 },
                 'user': {
                     '_id': str(user._id),
-                    'username': user.user_name,
+                    'user_name': user.user_name,
                     'profile_picture' : user.profile_picture,
                     'account_type': user.account_type,
                 }

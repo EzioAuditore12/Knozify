@@ -1,6 +1,7 @@
 from Authentication_Service.models import UserDetails
 from Profile_Service.models import Following
 from bson import ObjectId
+from Streaming_Service.models import Posts
 
 def get_post_counts(user_id: ObjectId):
     """
@@ -8,6 +9,8 @@ def get_post_counts(user_id: ObjectId):
 
     :param user_id: Object User Id of user.
     """
+    user = UserDetails.objects.get(_id=user_id)
+    count = int(Posts.objects.filter(followee=user).count())
     return 0
 
 

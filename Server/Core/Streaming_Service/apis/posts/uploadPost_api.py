@@ -4,7 +4,8 @@ from bson import ObjectId
 
 from Authentication_Service.models import UserDetails
 from Streaming_Service.models import Posts
-from Streaming_Service.apis.reels.utils import convert_to_mp4, generate_thumbnail
+from Streaming_Service.apis.reels.convert_to_mp4 import convert_to_mp4 
+from Streaming_Service.apis.reels.generate_thumbnail import  generate_thumbnail
 from .s3_uploader import upload_to_S3
 
 
