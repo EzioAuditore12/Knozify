@@ -14,8 +14,8 @@ export const getUserReels=async(user_id)=>{
             uploader_id:user_id
         });
         console.log("User reels fetched successfully");
-        console.log(result.data.links);
-        return result.data.links;
+        console.log(result.data.reels);
+        return result.data.reels;
     }catch(err){
         console.error('User reels fetching error details:',{
             status:err.response?.status,
