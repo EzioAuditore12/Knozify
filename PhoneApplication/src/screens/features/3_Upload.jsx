@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { View } from 'react-native';
+import { View, Keyboard, Platform, KeyboardAvoidingView } from 'react-native';
 
 //components
 import UploadPost from '../../components/3_Upload/01_UploadPost';
@@ -11,25 +11,49 @@ import Livestream from '../../components/3_Upload/04_Livestream';
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+  const [keyboardStatus, setKeyboardStatus] = useState(false);
+
+  React.useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
     <Tab.Navigator 
       tabBarPosition='bottom'
       screenOptions={{
         tabBarStyle: {
-          backgroundColor: 'transparent',
+          backgroundColor: 'white',
           elevation: 0,       // Remove shadow on Android
           shadowOpacity: 0,    // Remove shadow on iOS
           height: 50,
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          display: keyboardStatus ? 'none' : 'flex', 
         },
         tabBarIndicatorStyle: {
-          backgroundColor: 'transparent', // Remove indicator line
+          backgroundColor: 'transparent',
         },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: true,
         tabBarShowIcon: true,
       }}
-      sceneContainerStyle={{ flex: 1 }} // Makes screen content fill available space
+      sceneContainerStyle={{ 
+        backgroundColor: 'white',
+        paddingBottom: 50,
+      }}
     >
       <Tab.Screen name="Post" component={UploadPost} />
       <Tab.Screen name="Reel" component={UploadReel} />
@@ -41,9 +65,13 @@ function MyTabs() {
 
 const Upload = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView 
+      style={{ flex: 1, backgroundColor: 'white' }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+    >
       <MyTabs/>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 

@@ -1,277 +1,198 @@
-import React, { useState,useEffect } from 'react'  // <-- added useState
-import { View, Text, ScrollView, Dimensions } from 'react-native'
+import React, { useState, useEffect ,useCallback} from 'react'
+import { View, Text, ScrollView, Dimensions ,RefreshControl } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { useSelector } from 'react-redux'
 
-// components
 import ProfileHeader from '../../components/5_Profile/01_profileHeader'
 import UserAvatar from '../../components/5_Profile/02_userAvatar'
 import UserDetails from '../../components/5_Profile/03_userDetails'
 import UserStories from '../../components/5_Profile/04_userStories'
 import UserProfilePosts from '../../components/5_Profile/05_userPosts'
 import UserReels from '../../components/5_Profile/06_userReels'
+
 import { getUserDetails } from '../../api/Profile/profile.details'
-import { useSelector } from 'react-redux'
-
-const userStatus = [
-  {
-    userName: 'Daksh',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg'
-  },
-  {
-    userName: 'Manas',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737165276/gbykpdwgflraoypp9rsi.jpg'
-  },
-  {
-    userName: 'Vikas',
-    userAvatar: 'https://i.pravatar.cc/150?img=3'
-  },
-  {
-    userName: 'Rahul',
-    userAvatar: 'https://i.pravatar.cc/150?img=4'
-  },
-  {
-    userName: 'Priya',
-    userAvatar: 'https://i.pravatar.cc/150?img=5'
-  },
-  {
-    userName: 'Neha',
-    userAvatar: 'https://i.pravatar.cc/150?img=6'
-  },
-  {
-    userName: 'Amit',
-    userAvatar: 'https://i.pravatar.cc/150?img=7'
-  },
-  {
-    userName: 'Anjali',
-    userAvatar: 'https://i.pravatar.cc/150?img=8'
-  },
-  {
-    userName: 'Raj',
-    userAvatar: 'https://i.pravatar.cc/150?img=9'
-  },
-  {
-    userName: 'Meera',
-    userAvatar: 'https://i.pravatar.cc/150?img=10'
-  },
-  {
-    userName: 'Arjun',
-    userAvatar: 'https://i.pravatar.cc/150?img=11'
-  },
-  {
-    userName: 'Kavita',
-    userAvatar: 'https://i.pravatar.cc/150?img=12'
-  },
-  {
-    userName: 'Rohit',
-    userAvatar: 'https://i.pravatar.cc/150?img=13'
-  },
-  {
-    userName: 'Nisha',
-    userAvatar: 'https://i.pravatar.cc/150?img=14'
-  },
-  {
-    userName: 'Arun',
-    userAvatar: 'https://i.pravatar.cc/150?img=15'
-  },
-  {
-    userName: 'Pooja',
-    userAvatar: 'https://i.pravatar.cc/150?img=16'
-  },
-  {
-    userName: 'Karan',
-    userAvatar: 'https://i.pravatar.cc/150?img=17'
-  },
-  {
-    userName: 'Sanya',
-    userAvatar: 'https://i.pravatar.cc/150?img=18'
-  },
-  {
-    userName: 'Vivek',
-    userAvatar: 'https://i.pravatar.cc/150?img=19'
-  },
-  {
-    userName: 'Ritu',
-    userAvatar: 'https://i.pravatar.cc/150?img=20'
-  }
-]
-
-const userPosts = [
-  {
-    id: '1',
-    userName: 'Daksh',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737164154/avmrjdkmjr116rxu5uis.jpg',
-    postVideo:
-      'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    timestamp: '30 mins ago',
-    postTitle: 'Beautiful Morning!',
-    postContent:
-      'Starting my day with a perfect cup of coffee ☕ and getting ready to code',
-    postTags: ['#coding', '#react', '#react native'],
-    likes: 10,
-    comments: [],
-    shares: 2
-  },
-  {
-    id: '2',
-    userName: 'Manas',
-    userAvatar:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737165276/gbykpdwgflraoypp9rsi.jpg',
-    timestamp: '1 hour ago',
-    postImage:
-      'https://res.cloudinary.com/dpcloud123/image/upload/v1737170301/twbxmfx4bevi0usu8cst.png',
-    postTitle: 'New Project Alert!',
-    postContent:
-      'Just started working on a new project. Stay tuned for more updates!',
-    postTags: ['#django', '#backend'],
-    likes: 25,
-    comments: [],
-    shares: 5
-  },
-  {
-    id: '3',
-    userName: 'Vikas',
-    userAvatar: 'https://i.pravatar.cc/150?img=3',
-    postImage: '',
-    timestamp: '2 hours ago',
-    postTitle: 'Weekend Vibes!',
-    postContent: 'Enjoying the weekend with my friends. #weekendvibes',
-    postTags: ['#weekend', '#friends'],
-    likes: 30,
-    comments: [],
-    shares: 10
-  }
-]
+import { getUserPosts } from '../../api/Profile/profile.getPosts'
+import { getUserReels } from '../../api/Profile/profile.getReels'
 
 const ProfileTabs = createMaterialTopTabNavigator()
 
-// Wrapper component for posts screen
-const PostsWrapper = () => (
-    <View style={{ flex: 1 }}>
-      <UserProfilePosts userPosts={userPosts} />
-    </View>
-  )
+const PostsWrapper = ({ userPosts }) => (
+  <View style={{ flex: 1 }}>
+    <UserProfilePosts userPosts={userPosts} />
+  </View>
+)
 
-const ReelsWrapper = () => (
-    <View style={{ flex: 1 }}>
-      <UserReels />
-    </View>
-  )
+const ReelsWrapper = ({userReels}) => (
+  <View style={{ flex: 1 }}>
+    <UserReels userReels={userReels}/>
+  </View>
+)
 
-  function MyTabsProfile() {
-    return (
-      <ProfileTabs.Navigator
-        screenOptions={{
-          tabBarStyle: {
-            backgroundColor: 'white',
-            elevation: 0,
-            shadowOpacity: 0
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: '#9AE6C6',
-            height: 3
-          },
-          tabBarLabelStyle: {
-            color: 'black',
-            fontWeight: 'bold',
-            textTransform: 'uppercase'
-          }
+
+const MyTabsProfile = ({ postCount, userPosts, reelCount,userReels }) => {
+  return (
+    <ProfileTabs.Navigator
+      screenOptions={{
+        tabBarStyle: { backgroundColor: 'white', shadowOpacity: 0 },
+        tabBarIndicatorStyle: { backgroundColor: '#9AE6C6', height: 3 },
+        tabBarLabelStyle: {
+          color: 'black',
+          fontWeight: 'bold',
+          textTransform: 'uppercase'
+        }
+      }}
+    >
+      <ProfileTabs.Screen
+        name="Posts"
+        children={() => <PostsWrapper userPosts={userPosts} />}
+        options={{
+          tabBarLabel: `Posts ${postCount ? `(${postCount})` : ''}`
         }}
+      />
+      <ProfileTabs.Screen
+        name="Reels"
+        children={() => <ReelsWrapper userReels={userReels} />}
+        options={{ 
+          tabBarLabel: `Reels ${reelCount ? `(${reelCount})` : ''}`
+          }}   
+      />
+    </ProfileTabs.Navigator>
+  )
+}
+
+const UserProfile = () => {
+  const { user } = useSelector((state) => state.auth)
+  const [profile, setProfile] = useState({ details: {}, posts: [],reels: [] })
+
+  const fetchUserDetails = async () => {
+    try {
+      const result = await getUserDetails(user._id)
+      setProfile(prev => ({
+        ...prev,
+        details: result.data
+      }))
+    } catch (err) {
+      console.error(
+        "Error fetching user details:",
+        err.response ? err.response.data : err.message
+      )
+    }
+  }
+
+  const fetchUserPosts = async () => {
+    try {
+      const posts = await getUserPosts(user._id)
+      setProfile(prev => ({
+        ...prev,
+        posts: posts
+      }))
+    } catch (err) {
+      console.error(
+        "Error fetching user posts:",
+        err.response ? err.response.data : err.message
+      )
+    }
+  }
+
+  const fetchUserReels = async () => {
+    try {
+      const reels = await getUserReels(user._id)
+      setProfile(prev => ({
+        ...prev,
+        reels: reels
+      }))
+    } catch (err) {
+      console.error(
+        "Error fetching user reels:",
+        err.response ? err.response.data : err.message
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (user?._id) {
+      fetchUserDetails()
+      fetchUserPosts()
+      fetchUserReels()
+    }
+  }, [])
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    Promise.all([
+      fetchUserDetails(),
+      fetchUserPosts(),
+      fetchUserReels()
+    ]).finally(() => {
+      setRefreshing(false);
+    });
+  }, []);
+
+  const ProfileSection = () => (
+    <ScrollView 
+      contentContainerStyle={{ 
+        flexGrow: 0,
+        paddingBottom: 0,
+        marginBottom: 0  
+      }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      scrollEnabled={true}
+      nestedScrollEnabled={true}
+      style={{ flexGrow: 0 }}
+    >
+      <LinearGradient
+        colors={[
+          '#9AE6C6',
+          '#A6E9CD',
+          '#B2ECD4',
+          '#BEEFDA',
+          '#D7F5E9',
+          '#F1FBF7',
+          'white',
+          'white',
+          'white',
+          'white',
+          'white'
+        ]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+        className="items-center"
+        style={{ marginBottom: 0 }} 
       >
-        <ProfileTabs.Screen
-          name="Posts"
-          component={PostsWrapper}
-          options={{
-            tabBarLabel: `Posts (${userPosts.length})`
+        <ProfileHeader userDetails={profile.details} />
+        <UserAvatar
+          userDetails={{
+            user_name: profile.details.user_name,
+            profile_picture: profile.details.profile_picture
           }}
         />
-        <ProfileTabs.Screen 
-          name="Reels" 
-          component={ReelsWrapper} 
-          options={{ tabBarLabel: 'Reels' }}
+        <UserDetails
+          userDetails={{
+            posts: profile.details.post_counts,
+            followers: profile.details.follower_counts,
+            following: profile.details.following_counts
+          }}
         />
-      </ProfileTabs.Navigator>
-    )
-  }
-  
+      </LinearGradient>
+    </ScrollView>
+  );
 
-  // User Profile
-  const UserProfile = () => {
-    const [gradientHeight, setGradientHeight] = useState(0)
-    
-
-    const onGradientLayout = (event) => {
-      const { height } = event.nativeEvent.layout
-      setGradientHeight(height)
-    }
-
-    const { user } = useSelector((state) => state.auth)
-    const [userDetails, setUserDetails] = useState({})
-
-    const fetchUserDetails = async () => {
-      try {
-        const result = await getUserDetails(user._id)
-        setUserDetails(result.data)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    useEffect(() => {
-      fetchUserDetails()
-    }, [])
-
-    console.log(userDetails)
-    return (
-      <ScrollView contentContainerStyle={{ flexGrow: 1 /* removed height: gradientHeight */ }}>
-        <View className="flex-1">
-          <LinearGradient
-            onLayout={onGradientLayout} // <-- added onLayout handler
-            colors={[
-              '#9AE6C6',
-              '#A6E9CD',
-              '#B2ECD4',
-              '#BEEFDA',
-              '#D7F5E9',
-              '#F1FBF7',
-              'white',
-              'white',
-              'white',
-              'white',
-              'white'
-            ]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            className="flex-1 items-center"
-          >
-            <View className="items-center mb-[20px]">
-              <ProfileHeader userDetails={userDetails} />
-              <UserAvatar userDetails={{
-                user_name: userDetails.user_name,
-                profile_picture: userDetails.profile_picture
-              }} />
-              
-              <UserDetails
-                userDetails={{
-                  posts: userDetails.post_counts,
-                  followers: userDetails.follower_counts,
-                  following: userDetails.following_counts
-                }}
-              />
-            </View>
-            {/*<UserStories stories={userStatus} />*/}
-          </LinearGradient>
-    
-          {/* Tab Navigator Container */}
-          <View className='flex-1'>
-            <MyTabsProfile />
-          </View>
-        </View>
-      </ScrollView>
-    )
-  }
+  return (
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <ProfileSection />
+      <MyTabsProfile
+        postCount={profile.posts.length}
+        userPosts={profile.posts}
+        reelCount={profile.reels.length}
+        userReels={profile.reels}
+      />
+    </View>
+  );
+}
 
 export default UserProfile

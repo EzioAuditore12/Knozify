@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Image, Keyboard } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -18,23 +18,22 @@ const Tabs = createBottomTabNavigator();
 
 const BottomTabScreens = () => {
  const {user} = useSelector(state => state.auth);
- 
  const userImage = user?.profile_picture;
+ const [keyboardStatus, setKeyboardStatus] = React.useState(false);
 
-  const fetchUserDetails = async () => {
-    try {
-      const result = await AsyncStorage.getItem('userData');
-      if (result) {
-        setUserDetails(JSON.parse(result));
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+ React.useEffect(() => {
+   const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+     setKeyboardStatus(true);
+   });
+   const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+     setKeyboardStatus(false);
+   });
 
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
+   return () => {
+     showSubscription.remove();
+     hideSubscription.remove();
+   };
+ }, []);
 
   return (
     <Tabs.Navigator
@@ -45,8 +44,10 @@ const BottomTabScreens = () => {
         tabBarStyle: {
           height: 55,
           backgroundColor: 'white',
+          display: keyboardStatus ? 'none' : 'flex'
         },
         elevation: 10,
+        keyboardHidesTabBar: true, // Add this line
       }}
     >
       <Tabs.Screen
