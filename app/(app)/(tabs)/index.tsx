@@ -3,10 +3,11 @@ import React, { useState } from 'react'
 import { Text,Input,ActivityIndicator,Button,Checkbox } from '@/components/ui'
 import { authStore } from '@/store'
 import { axiosInstance } from '@/services/axiosInstance'
+import { router } from 'expo-router'
 
 const Index = () => {
   const [isChecked,setIsChecked]=useState(false)
-  const {user,authTokens}=authStore.getState()
+  const {user,authTokens,logoutUser}=authStore.getState()
 
   const getUserDetails=async()=>{
     const response=await axiosInstance.get("/account/api/v1/get-user/")
@@ -40,6 +41,14 @@ const Index = () => {
       <Text
       className='text-white'
       >Hello</Text>
+    </Button>
+    <Button
+    onPress={()=>{
+      logoutUser()
+      router.replace("/(auth)/login")
+    }}
+    >
+      <Text>Logout</Text>
     </Button>
     <Checkbox
     value={isChecked}

@@ -1,15 +1,16 @@
+// TODO : Need to improve the topography logic and fiix it
 import { Text as RNText, TextProps } from 'react-native'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/utils/tailwind-cn'
 import { forwardRef, ComponentPropsWithRef } from 'react'
 
-const textVariants=cva(
+const typographyVariants=cva(
     "font-medium",
     {
         variants:{
             intent:{
                 primary: "text-black dark:text-white",
-                secondary: "text-gray-400",
+                secondary: "text-gray-300",
                 destructive: "text-red-500"
             },
             size:{
@@ -27,14 +28,14 @@ const textVariants=cva(
     }
 )
 
-type RNTextProps = ComponentPropsWithRef<typeof RNText> & VariantProps<typeof textVariants>
+type RNTextProps = ComponentPropsWithRef<typeof RNText> & VariantProps<typeof typographyVariants>
 
-export const Text = forwardRef<RNText, RNTextProps>((
+export const Typography = forwardRef<RNText, RNTextProps>((
     { intent, size, className,children, ...props }, ref) => {
     return (
         <RNText
             ref={ref}
-            className={cn(textVariants({ intent, size }), className)}
+            className={cn(typographyVariants({ intent, size }), className)}
             {...props}
         >
             {children}
@@ -42,4 +43,4 @@ export const Text = forwardRef<RNText, RNTextProps>((
     )
 })
 
-Text.displayName = "Text";
+Typography.displayName = "Typography";

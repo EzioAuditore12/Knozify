@@ -1,19 +1,17 @@
 import axios from "axios";
-import { authStore } from "@/store";
 import { jwtDecode } from "jwt-decode";
 
-const API_URL=process.env.EXPO_PUBLIC_API_URL
+//store
+import { authStore } from "@/store";
+
+//loginApi
+import { loginAPI } from "../services/loginApi";
 
 
 export async function LoginUser(username:string,password:string){
-    try {
-            const {authTokens,user}=authStore.getState()
-            const response = await axios.post(`${API_URL}/account/api/v1/token/`, {
-              username,
-              password,
-            });
-            
-            const authroizationTokens = response.data;
+    try {      
+            const authroizationTokens=await loginAPI({username,password})
+            console.log(authroizationTokens)
             const decodedToken = jwtDecode<{ user_id: string }>(authroizationTokens.access);
 
             authStore.setState({

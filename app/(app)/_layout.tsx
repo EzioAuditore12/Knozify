@@ -4,7 +4,7 @@ import { authStore } from "@/store"
 const Layout = () => {
     const {user}=authStore.getState()
     if(!user){
-        return <Redirect href={'/signIn'}/>
+        return <Redirect href={"/(auth)/login"}/>
     }
   return (
     <Stack>
