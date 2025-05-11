@@ -43,5 +43,7 @@ yarn-error.*
 android/
 ios/
 
+#environment
+.env
 
 app-example

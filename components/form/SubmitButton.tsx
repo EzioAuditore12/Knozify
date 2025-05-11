@@ -29,7 +29,7 @@ export const SubmitButton=({
         disabled={isSubmitting || !canSubmit}
         {...props}
         >
-            <Text>
+            <Text className="text-white">
                 {title}
             </Text>
         </Button>

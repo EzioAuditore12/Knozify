@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { forwardRef, useState } from 'react' 
 import { cn } from '@/utils/tailwind-cn'
 
-const inputVariants = cva('rounded-md px-3 py-2 border-2', {
+const inputVariants = cva('rounded-md px-3 py-2 border-2 text-black dark:text-white', {
   variants: {
     focus: {
       true:  'border-blue-500 bg-gray-100 dark:bg-gray-800',
@@ -43,7 +43,8 @@ export const Input = forwardRef< TextInput, FocusableInputProps >(
     return (
       <TextInput
         ref={ref}
-        className={cn(inputVariants({ focus: isFocused }), className)} 
+        className={cn(inputVariants({ focus: isFocused }), className)}
+ 
         onFocus={handleFocus}
         onBlur={handleBlur}
         {...props}
