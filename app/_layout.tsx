@@ -4,7 +4,6 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {useSafeAreaInsets } from 'react-native-safe-area-context';
 
 //nativewind imports
 import "../global.css"
@@ -23,7 +22,8 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="signIn" options={{headerShown:false}}/>
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
