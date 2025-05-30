@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView,KeyboardAvoidingView } from 'react-native'
 import { Dimensions } from 'react-native'
 import { router } from 'expo-router'
 import { useState } from 'react'
@@ -27,6 +27,7 @@ const Login = () => {
   }
   
   return (
+    <KeyboardAvoidingView className='flex-1' behavior={"padding"}>
     <ScrollView
     className='flex-1'
     contentContainerClassName='flex-1 bg-red-500'
@@ -43,6 +44,7 @@ const Login = () => {
       error={error}
       />
     </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

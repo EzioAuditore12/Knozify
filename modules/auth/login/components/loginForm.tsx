@@ -12,6 +12,7 @@ import { useAppForm } from '@/hooks/useFormHook'
 
 //Hello Wave
 import { HelloWave } from '@/components/HelloWave'
+import { router } from 'expo-router'
 
 
 type LoginFormProps = {
@@ -110,6 +111,15 @@ const LoginForm = ({onSubmit,error}:LoginFormProps) => {
           </Button>
 
         </View>
+
+        <Button
+          className='rounded-md bg-green-500'
+          onPress={()=>{
+            router.push("/(auth)/register")
+          }}
+          >
+            <Text>Go to registeration</Text>
+        </Button>
 
       </View>
 
