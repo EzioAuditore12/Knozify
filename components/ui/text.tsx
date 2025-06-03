@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Text as SlotText } from "@rn-primitives/slot";
 import {
 	type ComponentProps,
@@ -6,7 +7,6 @@ import {
 	useContext,
 } from "react";
 import { Text as RNText } from "react-native";
-import { cn } from "~/lib/utils";
 
 const TextClassContext = createContext<string | undefined>(undefined);
 

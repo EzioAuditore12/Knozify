@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
 	Fallback,
 	type FallbackProps,
@@ -10,7 +11,6 @@ import {
 	type RootRef,
 } from "@rn-primitives/avatar";
 import { type RefObject } from "react";
-import { cn } from "~/lib/utils";
 
 function Avatar({
 	className,

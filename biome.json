@@ -38,7 +38,7 @@
 				"useValidTypeof": "error"
 			}
 		},
-		"ignore": ["android/app/build", "dist/*"]
+		"ignore": ["android", "dist/*", ".expo", "yarn.lock", "node_modules"]
 	},
 	"javascript": {
 		"formatter": { "quoteStyle": "double" },

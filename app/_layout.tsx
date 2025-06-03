@@ -1,4 +1,6 @@
-import "~/global.css";
+import "@/global.css";
+import { NAV_THEME } from "@/lib/constants";
+import { useColorScheme } from "@/lib/useColorScheme";
 import {
 	DarkTheme,
 	DefaultTheme,
@@ -8,9 +10,6 @@ import {
 import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { ThemeToggle } from "~/components/ThemeToggle";
-import { NAV_THEME } from "~/lib/constants";
-import { useColorScheme } from "~/lib/useColorScheme";
 
 const LIGHT_THEME: Theme = {
 	...DefaultTheme,
@@ -34,10 +33,9 @@ export default function RootLayout() {
 			<StatusBar style={isDarkColorScheme ? "light" : "dark"} />
 			<Stack>
 				<Stack.Screen
-					name="index"
+					name="(tabs)"
 					options={{
-						title: "Starter Base",
-						headerRight: () => <ThemeToggle />,
+						headerShown: false,
 					}}
 				/>
 			</Stack>

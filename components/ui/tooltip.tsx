@@ -1,3 +1,5 @@
+import { TextClassContext } from "@/components/ui/text";
+import { cn } from "@/lib/utils";
 import {
 	Content,
 	type ContentProps,
@@ -10,8 +12,6 @@ import {
 import { type RefObject } from "react";
 import { StyleSheet } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { TextClassContext } from "~/components/ui/text";
-import { cn } from "~/lib/utils";
 
 const Tooltip = Root;
 

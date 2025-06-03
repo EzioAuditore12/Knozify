@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
 	Indicator as PrimitiveIndicator,
 	Root,
@@ -12,7 +13,6 @@ import Animated, {
 	useDerivedValue,
 	withSpring,
 } from "react-native-reanimated";
-import { cn } from "~/lib/utils";
 
 function Progress({
 	className,
