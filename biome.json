@@ -1,7 +1,17 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
-	"files": { "ignoreUnknown": false, "ignore": [] },
+	"vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"**/android/**",
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/.expo/**",
+			"**/yarn.lock",
+			"**/package-lock.json"
+		]
+	},
 	"formatter": { "enabled": true, "indentStyle": "tab" },
 	"organizeImports": { "enabled": true },
 	"linter": {
@@ -38,7 +48,13 @@
 				"useValidTypeof": "error"
 			}
 		},
-		"ignore": ["android", "dist/*", ".expo", "yarn.lock", "node_modules"]
+		"ignore": [
+			"**/android/**",
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/.expo/**",
+			"**/yarn.lock"
+		]
 	},
 	"javascript": {
 		"formatter": { "quoteStyle": "double" },
