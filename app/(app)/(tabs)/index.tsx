@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui";
 import { Text } from "@/components/ui";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui";
 import { Info } from "@/lib/icons/Info";
+import { router } from "expo-router";
 import * as React from "react";
 import { View } from "react-native";
 import Animated, {
@@ -106,6 +107,13 @@ export default function Screen() {
 					</Button>
 				</CardFooter>
 			</Card>
+			<Button
+				onPress={() => {
+					router.push("/(auth)/login");
+				}}
+			>
+				<Text>Go to login page</Text>
+			</Button>
 		</View>
 	);
 }

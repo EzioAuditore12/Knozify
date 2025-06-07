@@ -35,3 +35,23 @@ export {
 
 //Input
 export { Input, type InputProps } from "./input";
+
+//Linear Gradient
+export { LinearGradient, type LinearGradientProps } from "./linearGradient";
+
+//Typography
+//Typography
+export {
+	BlockQuote,
+	Code,
+	H1,
+	H2,
+	H3,
+	H4,
+	Large,
+	Lead,
+	Muted,
+	P,
+	Small,
+	type TypographyProps,
+} from "./typography";
