@@ -1,37 +1,37 @@
 import { LinearGradient } from "@/components/ui";
-import { ScrollContainer } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
-import { KeyboardAvoidingView, Platform } from "react-native";
 import { type ReactNode } from "react";
+import {
+	KeyboardAvoidingView,
+	KeyboardAwareScrollView,
+} from "react-native-keyboard-controller";
 
 type AuthLayoutProps = {
-    children: ReactNode;
-    className?: string;
-    showGradient?: boolean;
+	children: ReactNode;
+	className?: string;
+	showGradient?: boolean;
 };
 
-export function AuthLayout({ 
-    children, 
-    className,
-    showGradient = true 
+export function AuthLayout({
+	children,
+	className,
+	showGradient = true,
 }: AuthLayoutProps) {
-    return (
-        <KeyboardAvoidingView 
-            style={{ flex: 1 }} 
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
-        >
-            <ScrollContainer 
-                contentContainerClassName={cn("p-2", className)}
-                contentContainerStyle={{ flexGrow: 1 }}
-                keyboardShouldPersistTaps="handled"
-            >
-                {showGradient && <LinearGradient position={"absolute"} size={"screen"} />}
+	return (
+		<KeyboardAvoidingView style={{ flex: 1 }}>
+			<KeyboardAwareScrollView
+				contentContainerStyle={{ flexGrow: 1 }}
+				keyboardShouldPersistTaps="handled"
+				contentContainerClassName={cn("p-2", className)}
+			>
+				{showGradient && (
+					<LinearGradient position={"absolute"} size={"screen"} />
+				)}
 
-                {children}
-            </ScrollContainer>
-        </KeyboardAvoidingView>
-    );
+				{children}
+			</KeyboardAwareScrollView>
+		</KeyboardAvoidingView>
+	);
 }
 
 export type { AuthLayoutProps };

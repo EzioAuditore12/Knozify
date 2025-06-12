@@ -10,6 +10,7 @@ import {
 import { PortalHost } from "@rn-primitives/portal";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 const LIGHT_THEME: Theme = {
 	...DefaultTheme,
@@ -29,23 +30,25 @@ export default function RootLayout() {
 	const { isDarkColorScheme } = useColorScheme();
 
 	return (
-		<ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-			<StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-			<Stack initialRouteName="(app)">
-				<Stack.Screen
-					name="(app)"
-					options={{
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen
-					name="(auth)"
-					options={{
-						headerShown: false,
-					}}
-				/>
-			</Stack>
-			<PortalHost />
-		</ThemeProvider>
+		<KeyboardProvider>
+			<ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+				<StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+				<Stack initialRouteName="(app)">
+					<Stack.Screen
+						name="(app)"
+						options={{
+							headerShown: false,
+						}}
+					/>
+					<Stack.Screen
+						name="(auth)"
+						options={{
+							headerShown: false,
+						}}
+					/>
+				</Stack>
+				<PortalHost />
+			</ThemeProvider>
+		</KeyboardProvider>
 	);
 }

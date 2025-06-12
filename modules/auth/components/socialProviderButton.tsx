@@ -25,7 +25,7 @@ export function SocialProviderButton({
 			className={cn(
 				"flex-row gap-x-2 rounded-2xl max-w-[400px]",
 				"shadow-2xl",
-				className
+				className,
 			)}
 			{...buttonProps}
 		>

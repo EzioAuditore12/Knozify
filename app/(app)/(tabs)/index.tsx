@@ -1,16 +1,20 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui";
-import { Button } from "@/components/ui";
 import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	Button,
 	Card,
 	CardContent,
 	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
+	Progress,
+	Text,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
 } from "@/components/ui";
-import { Progress } from "@/components/ui";
-import { Text } from "@/components/ui";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui";
 import { Info } from "@/lib/icons/Info";
 import { router } from "expo-router";
 import * as React from "react";
@@ -113,6 +117,13 @@ export default function Screen() {
 				}}
 			>
 				<Text>Go to login page</Text>
+			</Button>
+			<Button
+				onPress={() => {
+					router.push("/(auth)/register");
+				}}
+			>
+				<Text>Go to register</Text>
 			</Button>
 		</View>
 	);

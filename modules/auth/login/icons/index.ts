@@ -1,2 +1,2 @@
-export {FacebookIcon} from "./facebook"
-export {GoogleIcon} from "./google"
+export { FacebookIcon } from "./facebook";
+export { GoogleIcon } from "./google";

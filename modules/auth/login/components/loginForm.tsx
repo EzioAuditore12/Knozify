@@ -1,48 +1,38 @@
+import { Button, Input, Text } from "@/components/ui";
 import { Stack } from "@/components/ui/layout/stack";
-
-import { Text } from "@/components/ui";
-//schema and type
-import { loginUserObject, loginUserSchema } from "../schemas/loginSchema";
-
-//form hook
-import { useAppForm } from "@/lib/useAppForm";
+import { useState } from "react";
 
 export function LoginForm() {
-	const loginForm = useAppForm({
-		defaultValues: loginUserObject,
-		validators: {
-			onChange: loginUserSchema,
-		},
-		onSubmit: ({ value }) => {
-			console.log(value);
-		},
-	});
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
+
+	const handleSubmit = () => {
+		console.log({ username, password });
+	};
+
 	return (
-		<Stack className="w-full items-center">
-			<loginForm.AppField name="username">
-				{(field) => (
-					<field.TextField
-						className="max-w-[400px] rounded-xl"
-						placeholder="Username"
-					/>
-				)}
-			</loginForm.AppField>
+		<Stack className="w-full items-center gap-y-4">
+			<Input
+				className="max-w-[400px] rounded-xl"
+				placeholder="Username"
+				value={username}
+				onChange={(e) => setUsername(e.nativeEvent.text)}
+			/>
 
-			<loginForm.AppField name="password">
-				{(field) => (
-					<field.TextField
-						className="max-w-[400px] rounded-xl"
-						placeholder="Password"
-						secureTextEntry
-					/>
-				)}
-			</loginForm.AppField>
+			<Input
+				className="max-w-[400px] rounded-xl"
+				placeholder="Password"
+				value={password}
+				onChange={(e) => setPassword(e.nativeEvent.text)}
+				secureTextEntry
+			/>
 
-			<loginForm.AppForm>
-				<loginForm.SubmitButton className="bg-teal-600 dark:bg-green-600 rounded-3xl w-full max-w-[400px]">
-					<Text className="text-lg font-semibold dark:text-white">Login</Text>
-				</loginForm.SubmitButton>
-			</loginForm.AppForm>
+			<Button
+				className="bg-teal-600 dark:bg-green-600 rounded-3xl w-full max-w-[400px]"
+				onPress={handleSubmit}
+			>
+				<Text className="text-lg font-semibold dark:text-white">Login</Text>
+			</Button>
 		</Stack>
 	);
 }
