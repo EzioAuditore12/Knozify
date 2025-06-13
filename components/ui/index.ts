@@ -55,3 +55,15 @@ export {
 	Small,
 	type TypographyProps,
 } from "./typography";
+
+//Spinner
+export { Spinner } from "./spinner";
+
+//Input
+export {
+	InputOTP,
+	InputOTPSlot,
+	InputOTPDash,
+	InputOTPCaret,
+	type InputOTPProps,
+} from "./input-otp";

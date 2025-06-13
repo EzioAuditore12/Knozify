@@ -10,6 +10,7 @@ import {
 	CardHeader,
 	CardTitle,
 	Progress,
+	Spinner,
 	Text,
 	Tooltip,
 	TooltipContent,
@@ -125,6 +126,7 @@ export default function Screen() {
 			>
 				<Text>Go to register</Text>
 			</Button>
+			<Spinner size="xxxl" />
 		</View>
 	);
 }

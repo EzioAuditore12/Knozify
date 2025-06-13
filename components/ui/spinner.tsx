@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils";
 import { type VariantProps, cva } from "class-variance-authority";
 import { cssInterop } from "nativewind";
 import {
+	ActivityIndicatorProps,
 	ActivityIndicator as NativeActivityIndicator,
-	ActivityIndicatorProps as NativeActivityIndicatorProps,
 } from "react-native";
 
 cssInterop(NativeActivityIndicator, {
@@ -38,20 +38,13 @@ const activityIndicatorVariants = cva("", {
 	},
 });
 
-interface ActivityIndicatorProps
-	extends Omit<NativeActivityIndicatorProps, "size">,
-		VariantProps<typeof activityIndicatorVariants> {}
+// Omit the conflicting 'size' prop from ActivityIndicatorProps
+type SpinnerProps = Omit<ActivityIndicatorProps, "size"> &
+	VariantProps<typeof activityIndicatorVariants>;
 
-export function Spinner({
-	className,
-	intent,
-	size,
-	ref,
-	...props
-}: ActivityIndicatorProps & { ref?: React.Ref<NativeActivityIndicator> }) {
+export function Spinner({ className, intent, size, ...props }: SpinnerProps) {
 	return (
 		<NativeActivityIndicator
-			ref={ref}
 			className={cn(activityIndicatorVariants({ intent, size }), className)}
 			{...props}
 		/>

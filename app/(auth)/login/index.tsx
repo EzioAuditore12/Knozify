@@ -5,6 +5,7 @@ import {
 	LoginForm,
 	SocialProviderLogin,
 } from "@/modules/auth/login/components";
+import { router } from "expo-router";
 
 export default function Login() {
 	return (
@@ -14,7 +15,11 @@ export default function Login() {
 				<SocialProviderLogin />
 				<Muted className="text-lg">Or login with</Muted>
 				<LoginForm />
-				<Muted className="text-lg">Forgot Password ?</Muted>
+				<Muted className="text-lg"
+				onPress={()=>{
+					router.push("/login/forgot-password")
+				}}
+				>Forgot Password ?</Muted>
 				<Muted className="text-lg">
 					Don't have an account <Text className="text-purple-800">Sign Up</Text>
 				</Muted>

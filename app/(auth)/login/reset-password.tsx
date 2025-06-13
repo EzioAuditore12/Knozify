@@ -1,7 +1,7 @@
 import { Text } from "@/components/ui";
 import { View } from "react-native";
 
-export default function Register(){
+export default function ResetPassword(){
   return(
     <View>
       <Text>Hello</Text>
