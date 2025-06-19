@@ -9,6 +9,10 @@
 			"**/dist/**",
 			"**/.expo/**",
 			"**/yarn.lock",
+      "**/.yarn.yml",
+      "**/.yarn/**",
+      "**/.tamagui/**",
+      "",
 			"**/package-lock.json"
 		]
 	},

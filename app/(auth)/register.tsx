@@ -1,10 +1,11 @@
-import { Text } from "@/components/ui";
-import { View } from "react-native";
+import { Text, View } from 'tamagui'
 
-export default function Register(){
-  return(
-    <View>
-      <Text>Hello</Text>
+export default function RegisterScreen() {
+  return (
+    <View flex={1} items="center" justify="center" bg="$background">
+      <Text fontSize={20} color="$blue10">
+        Register
+      </Text>
     </View>
   )
 }

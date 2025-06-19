@@ -1,132 +1,55 @@
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-	Button,
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-	Progress,
-	Spinner,
-	Text,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from "@/components/ui";
-import { Info } from "@/lib/icons/Info";
-import { router } from "expo-router";
-import * as React from "react";
-import { View } from "react-native";
-import Animated, {
-	FadeInUp,
-	FadeOutDown,
-	LayoutAnimationConfig,
-} from "react-native-reanimated";
+import { ExternalLink } from '@tamagui/lucide-icons'
+import { Anchor, H2, Paragraph, XStack, YStack } from 'tamagui'
+import { ToastControl } from "../../../components/current-toast"
 
-const GITHUB_AVATAR_URI =
-	"https://i.pinimg.com/originals/ef/a2/8d/efa28d18a04e7fa40ed49eeb0ab660db.jpg";
+export default function TabOneScreen() {
+  return (
+    <YStack flex={1} items="center" gap="$8" px="$10" pt="$5" bg="$background">
+      <H2>Tamagui + Expo</H2>
 
-export default function Screen() {
-	const [progress, setProgress] = React.useState(78);
+      <ToastControl />
 
-	function updateProgressValue() {
-		setProgress(Math.floor(Math.random() * 100));
-	}
-	return (
-		<View className="flex-1 justify-center items-center gap-5 p-6 bg-secondary/30">
-			<Card className="w-full max-w-sm p-6 rounded-2xl">
-				<CardHeader className="items-center">
-					<Avatar alt="Rick Sanchez's Avatar" className="w-24 h-24">
-						<AvatarImage source={{ uri: GITHUB_AVATAR_URI }} />
-						<AvatarFallback>
-							<Text>RS</Text>
-						</AvatarFallback>
-					</Avatar>
-					<View className="p-3" />
-					<CardTitle className="pb-2 text-center">Rick Sanchez</CardTitle>
-					<View className="flex-row">
-						<CardDescription className="text-base font-semibold">
-							Scientist
-						</CardDescription>
-						<Tooltip delayDuration={150}>
-							<TooltipTrigger className="px-2 pb-0.5 active:opacity-50">
-								<Info
-									size={14}
-									strokeWidth={2.5}
-									className="w-4 h-4 text-foreground/70"
-								/>
-							</TooltipTrigger>
-							<TooltipContent className="py-2 px-4 shadow">
-								<Text className="native:text-lg">Freelance</Text>
-							</TooltipContent>
-						</Tooltip>
-					</View>
-				</CardHeader>
-				<CardContent>
-					<View className="flex-row justify-around gap-3">
-						<View className="items-center">
-							<Text className="text-sm text-muted-foreground">Dimension</Text>
-							<Text className="text-xl font-semibold">C-137</Text>
-						</View>
-						<View className="items-center">
-							<Text className="text-sm text-muted-foreground">Age</Text>
-							<Text className="text-xl font-semibold">70</Text>
-						</View>
-						<View className="items-center">
-							<Text className="text-sm text-muted-foreground">Species</Text>
-							<Text className="text-xl font-semibold">Human</Text>
-						</View>
-					</View>
-				</CardContent>
-				<CardFooter className="flex-col gap-3 pb-0">
-					<View className="flex-row items-center overflow-hidden">
-						<Text className="text-sm text-muted-foreground">Productivity:</Text>
-						<LayoutAnimationConfig skipEntering>
-							<Animated.View
-								key={progress}
-								entering={FadeInUp}
-								exiting={FadeOutDown}
-								className="w-11 items-center"
-							>
-								<Text className="text-sm font-bold text-sky-600">
-									{progress}%
-								</Text>
-							</Animated.View>
-						</LayoutAnimationConfig>
-					</View>
-					<Progress
-						value={progress}
-						className="h-2"
-						indicatorClassName="bg-sky-600"
-					/>
-					<View />
-					<Button
-						variant="outline"
-						className="shadow shadow-foreground/5"
-						onPress={updateProgressValue}
-					>
-						<Text>Update</Text>
-					</Button>
-				</CardFooter>
-			</Card>
-			<Button
-				onPress={() => {
-					router.push("/(auth)/login");
-				}}
-			>
-				<Text>Go to login page</Text>
-			</Button>
-			<Button
-				onPress={() => {
-					router.push("/(auth)/register");
-				}}
-			>
-				<Text>Go to register</Text>
-			</Button>
-			<Spinner size="xxxl" />
-		</View>
-	);
+      <XStack
+        items="center"
+        justify="center"
+        flexWrap="wrap"
+        gap="$1.5"
+        position="absolute"
+        b="$8"
+      >
+        <Paragraph fontSize="$5">Add</Paragraph>
+
+        <Paragraph fontSize="$5" px="$2" py="$1" color="$blue10" bg="$blue5">
+          tamagui.config.ts
+        </Paragraph>
+
+        <Paragraph fontSize="$5">to root and follow the</Paragraph>
+
+        <XStack
+          items="center"
+          gap="$1.5"
+          px="$2"
+          py="$1"
+          rounded="$3"
+          bg="$green5"
+          hoverStyle={{ bg: '$green6' }}
+          pressStyle={{ bg: '$green4' }}
+        >
+          <Anchor
+            href="https://tamagui.dev/docs/core/configuration"
+            textDecorationLine="none"
+            color="$green10"
+            fontSize="$5"
+          >
+            Configuration guide
+          </Anchor>
+          <ExternalLink size="$1" color="$green10" />
+        </XStack>
+
+        <Paragraph fontSize="$5" text="center">
+          to configure your themes and tokens.
+        </Paragraph>
+      </XStack>
+    </YStack>
+  )
 }

@@ -2,8 +2,7 @@ import { Stack } from "expo-router";
 
 export default function AuthLayout() {
 	return (
-		<Stack initialRouteName="login">
-			<Stack.Screen name="login" options={{ headerShown: false }} />
+		<Stack initialRouteName="register">
 			<Stack.Screen name="register" />
 		</Stack>
 	);
